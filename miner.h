@@ -79,18 +79,22 @@ static inline uint32_t swab32(uint32_t v)
 #endif
 }
 
-#ifdef HAVE_SYS_ENDIAN_H
-#include <sys/endian.h>
-#endif
+// #ifdef HAVE_SYS_ENDIAN_H
+// #include <sys/endian.h>
+// #endif
 
 #include <stdint.h>
 
-static inline uint32_t __bswap_32(uint32_t x) {
-    return ((x << 24) & 0xff000000 ) |
-           ((x <<  8) & 0x00ff0000 ) |
-           ((x >>  8) & 0x0000ff00 ) |
-           ((x >> 24) & 0x000000ff );
-}
+// static inline uint32_t __bswap_32(uint32_t x) {
+//     return ((x << 24) & 0xff000000 ) |
+//            ((x <<  8) & 0x00ff0000 ) |
+//            ((x >>  8) & 0x0000ff00 ) |
+//            ((x >> 24) & 0x000000ff );
+// }
+
+#define __bswap_32(x)                                  \
+  ((((x) & 0xff000000u) >> 24) | (((x) & 0x00ff0000u) >> 8)     \
+   | (((x) & 0x0000ff00u) << 8) | (((x) & 0x000000ffu) << 24))
 
 
 #ifndef htole32
