@@ -98,7 +98,11 @@ static inline uint32_t swab32(uint32_t v)
 
 
 #ifndef htole32
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#define htole32(x) (x)
+#else
 #define htole32(x) __bswap_32(x)
+#endif
 #endif
 
 #if !HAVE_DECL_BE32DEC
@@ -122,7 +126,7 @@ static inline uint32_t le32dec(const void *pp)
 void static inline WriteLE32(unsigned char *ptr, uint32_t x)
 {
 	uint32_t v = htole32(x);
-	memcpy(ptr, (char *)&v, 4);
+	memcpy(ptr, (unsigned char *)&v, 4);
 }
 
 // void static inline WriteBE32(unsigned char *ptr, uint32_t x)
