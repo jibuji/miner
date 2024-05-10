@@ -10,10 +10,11 @@
 
 #include "cpuminer-config.h"
 #include "miner.h"
-#include "randomx/randomx.h"
+#include "randomx.h"
 #include <string.h>
 #include <inttypes.h>
 #include <cpuid.h>
+#include "sha256.h"
 
 #if defined(USE_ASM) &&                            \
 	(defined(__x86_64__) ||                        \
@@ -202,28 +203,36 @@ static void sha256d_80_swap(uint32_t *hash, const uint32_t *data)
 
 void sha256d(unsigned char *hash, const unsigned char *data, int len)
 {
-	uint32_t S[16], T[16];
-	int i, r;
+	BYTE buf[SHA256_BLOCK_SIZE];
+	SHA256_CTX ctx;
+	sha256_init_(&ctx);
+	sha256_update_(&ctx, data, len);
+	sha256_final_(&ctx, buf);
+	sha256_init_(&ctx);
+	sha256_update_(&ctx, buf, SHA256_BLOCK_SIZE);
+	sha256_final_(&ctx, hash);
+	// uint32_t S[16], T[16];
+	// int i, r;
 
-	sha256_init(S);
-	for (r = len; r > -9; r -= 64)
-	{
-		if (r < 64)
-			memset(T, 0, 64);
-		memcpy(T, data + len - r, r > 64 ? 64 : (r < 0 ? 0 : r));
-		if (r >= 0 && r < 64)
-			((unsigned char *)T)[r] = 0x80;
-		for (i = 0; i < 16; i++)
-			T[i] = be32dec(T + i);
-		if (r < 56)
-			T[15] = 8 * len;
-		sha256_transform(S, T, 0);
-	}
-	memcpy(S + 8, sha256d_hash1 + 8, 32);
-	sha256_init(T);
-	sha256_transform(T, S, 0);
-	for (i = 0; i < 8; i++)
-		be32enc((uint32_t *)hash + i, T[i]);
+	// sha256_init(S);
+	// for (r = len; r > -9; r -= 64)
+	// {
+	// 	if (r < 64)
+	// 		memset(T, 0, 64);
+	// 	memcpy(T, data + len - r, r > 64 ? 64 : (r < 0 ? 0 : r));
+	// 	if (r >= 0 && r < 64)
+	// 		((unsigned char *)T)[r] = 0x80;
+	// 	for (i = 0; i < 16; i++)
+	// 		T[i] = be32dec(T + i);
+	// 	if (r < 56)
+	// 		T[15] = 8 * len;
+	// 	sha256_transform(S, T, 0);
+	// }
+	// memcpy(S + 8, sha256d_hash1 + 8, 32);
+	// sha256_init(T);
+	// sha256_transform(T, S, 0);
+	// for (i = 0; i < 8; i++)
+	// 	be32enc((uint32_t *)hash + i, T[i]);
 }
 
 static inline void sha256d_preextend(uint32_t *W)
@@ -780,23 +789,23 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
 	uint8_t seed[32];
 	pdata[19] = 0;
 	uint32_t keystore[4] ={pdata[0], pdata[17]/345678, pdata[18], 0};
-	// char pdata_hex[161] = {0};
-	// bin2hex(pdata_hex, (unsigned char *)pdata, 80);
-	// applog(LOG_INFO, "pdata_for_seed: %s", pdata_hex);
+	char pdata_hex[161] = {0};
+	bin2hex(pdata_hex, (unsigned char *)pdata, 80);
+	applog(LOG_INFO, "pdata_for_seed: %s", pdata_hex);
 	sha256d(seed, (unsigned char *)keystore, 16);
 
-	// char seed_hex[65] = {0};
-	// bin2hex(seed_hex, (unsigned char *)seed, 32);
+	char seed_hex[65] = {0};
+	bin2hex(seed_hex, (unsigned char *)seed, 32);
 
-	// applog(LOG_INFO, "seed: %s", seed_hex);
-	// char target_str[65] = {0};
-	// uint32_t target_be[8];
-	// for (int i = 0; i < 8; i++)
-	// {
-	// 	be32enc(target_be + i, ptarget[7 - i]);
-	// }
-	// bin2hex(target_str, (unsigned char *)target_be, 32);
-	// applog(LOG_INFO, "target: %s", target_str);
+	applog(LOG_INFO, "seed: %s", seed_hex);
+	char target_str[65] = {0};
+	uint32_t target_be[8];
+	for (int i = 0; i < 8; i++)
+	{
+		be32enc(target_be + i, ptarget[7 - i]);
+	}
+	bin2hex(target_str, (unsigned char *)target_be, 32);
+	applog(LOG_INFO, "target: %s", target_str);
 
 	randomx_init_cache(cache, &seed, sizeof(seed));
 

@@ -689,7 +689,12 @@ static bool gbt_work_decode(const json_t *val, struct work *work)
 		for (i = 0; i < n; i++)
 			sha256d(merkle_tree[i], merkle_tree[2 * i], 64);
 	}
-
+	printf("========== INFO ==========\n");
+	print_hex_mem("curtime", (&curtime), 4);
+	print_hex_mem("bits", &bits, 4);
+	print_hex_mem("version", &version, 4);
+	print_hex_mem("prevhash", &prevhash, 32);
+	print_hex_mem("merkle_tree", &merkle_tree, 32);
 	/* assemble block header */
 	unsigned char *d1 = (unsigned char *)work->data;
 	WriteLE32(d1, version); // work->data[0] = swab32(version);
@@ -708,6 +713,7 @@ static bool gbt_work_decode(const json_t *val, struct work *work)
 	memset(work->data + 19, 0x00, 52);
 	work->data[20] = 0x80000000;
 	work->data[31] = 0x00000280;
+	print_hex_mem("work->data", work->data, 32*4);
 
 	if (unlikely(!jobj_binary(val, "target", target, sizeof(target))))
 	{

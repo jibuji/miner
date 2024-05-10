@@ -3,6 +3,7 @@
 
 #include "cpuminer-config.h"
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <inttypes.h>
 #include <sys/time.h>
@@ -82,6 +83,20 @@ static inline uint32_t swab32(uint32_t v)
 #include <sys/endian.h>
 #endif
 
+#include <stdint.h>
+
+static inline uint32_t __bswap_32(uint32_t x) {
+    return ((x << 24) & 0xff000000 ) |
+           ((x <<  8) & 0x00ff0000 ) |
+           ((x >>  8) & 0x0000ff00 ) |
+           ((x >> 24) & 0x000000ff );
+}
+
+
+#ifndef htole32
+#define htole32(x) __bswap_32(x)
+#endif
+
 #if !HAVE_DECL_BE32DEC
 static inline uint32_t be32dec(const void *pp)
 {
@@ -106,11 +121,11 @@ void static inline WriteLE32(unsigned char *ptr, uint32_t x)
 	memcpy(ptr, (char *)&v, 4);
 }
 
-void static inline WriteBE32(unsigned char *ptr, uint32_t x)
-{
-	uint32_t v = htobe32(x);
-	memcpy(ptr, (char *)&v, 4);
-}
+// void static inline WriteBE32(unsigned char *ptr, uint32_t x)
+// {
+// 	uint32_t v = htobe32(x);
+// 	memcpy(ptr, (char *)&v, 4);
+// }
 
 #if !HAVE_DECL_BE32ENC
 static inline void be32enc(void *pp, uint32_t x)
@@ -280,5 +295,15 @@ extern bool tq_push(struct thread_q *tq, void *data);
 extern void *tq_pop(struct thread_q *tq, const struct timespec *abstime);
 extern void tq_freeze(struct thread_q *tq);
 extern void tq_thaw(struct thread_q *tq);
+
+
+static inline void print_hex_mem(const char *name, void *mem, size_t length) {
+    unsigned char *p = (unsigned char *)mem;
+	printf("\n===print_hex_mem===: %s\n", name);
+    for (size_t i = 0; i < length; i++) {
+        printf("%02x ", p[i]);
+    }
+    printf("\n");
+}
 
 #endif /* __MINER_H__ */
