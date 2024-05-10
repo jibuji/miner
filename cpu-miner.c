@@ -693,11 +693,11 @@ static bool gbt_work_decode(const json_t *val, struct work *work)
 	print_hex_mem("curtime", (&curtime), 4);
 	print_hex_mem("bits", &bits, 4);
 	print_hex_mem("version", &version, 4);
-	print_hex_mem("prevhash", &prevhash, 32);
-	print_hex_mem("merkle_tree", &merkle_tree, 32);
+	print_hex_mem("prevhash", prevhash, 32);
+	print_hex_mem("merkle_tree", merkle_tree, 32);
 	/* assemble block header */
 	unsigned char *d1 = (unsigned char *)work->data;
-	WriteLE32(d1, version); // work->data[0] = swab32(version);
+	WriteLE32(&d1[0], version); // work->data[0] = swab32(version);
 	memrev((unsigned char *)prevhash, 32);
 	memcpy(&d1[4], (char *)prevhash, 32);
 	// for (i = 0; i < 8; i++)
