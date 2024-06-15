@@ -1,0 +1,1189 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_9fd0f/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_9fd0f.dir/build.make CMakeFiles/cmTC_9fd0f.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9fd0f.dir/src.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -DCMAKE_HAVE_LIBC_PTHREAD  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_9fd0f.dir/src.c.o -MF CMakeFiles/cmTC_9fd0f.dir/src.c.o.d -o CMakeFiles/cmTC_9fd0f.dir/src.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/src.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/src.c:13:3: error: call to undeclared function 'pthread_cancel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   13 |   pthread_cancel(thread);
+      |   ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/src.c:13:3: note: did you mean 'pthread_once'?
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/pthread.h:264:5: note: 'pthread_once' declared here
+  264 | int pthread_once(pthread_once_t* _Nonnull __once, void (* _Nonnull __init_routine)(void));
+      |     ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_9fd0f.dir/build.make:79: CMakeFiles/cmTC_9fd0f.dir/src.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_9fd0f/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_2af58/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_2af58.dir/build.make CMakeFiles/cmTC_2af58.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2af58.dir/CheckFunctionExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=pthread_create -fPIE -MD -MT CMakeFiles/cmTC_2af58.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_2af58.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_2af58.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_2af58
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2af58.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=pthread_create -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_2af58.dir/CheckFunctionExists.c.o -o cmTC_2af58  -lpthreads -latomic -lm 
+ld.lld: error: unable to find library -lpthreads
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_2af58.dir/build.make:100: cmTC_2af58] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_2af58/fast] Error 2
+
+
+
+Determining if the function pthread_create exists in the pthread failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_08ebc/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_08ebc.dir/build.make CMakeFiles/cmTC_08ebc.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_08ebc.dir/CheckFunctionExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=pthread_create -fPIE -MD -MT CMakeFiles/cmTC_08ebc.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_08ebc.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_08ebc.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_08ebc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_08ebc.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=pthread_create -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_08ebc.dir/CheckFunctionExists.c.o -o cmTC_08ebc  -lpthread -latomic -lm 
+ld.lld: error: unable to find library -lpthread
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_08ebc.dir/build.make:100: cmTC_08ebc] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_08ebc/fast] Error 2
+
+
+
+Determining if the function connect exists in the socket failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_e6bef/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_e6bef.dir/build.make CMakeFiles/cmTC_e6bef.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e6bef.dir/CheckFunctionExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=connect -fPIE -MD -MT CMakeFiles/cmTC_e6bef.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_e6bef.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_e6bef.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_e6bef
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e6bef.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=connect -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_e6bef.dir/CheckFunctionExists.c.o -o cmTC_e6bef  -lsocket -latomic -lm 
+ld.lld: error: unable to find library -lsocket
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_e6bef.dir/build.make:100: cmTC_e6bef] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_e6bef/fast] Error 2
+
+
+
+Determining if the function ldap_init exists in the ldap failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_7ed2f/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_7ed2f.dir/build.make CMakeFiles/cmTC_7ed2f.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7ed2f.dir/CheckFunctionExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=ldap_init -fPIE -MD -MT CMakeFiles/cmTC_7ed2f.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_7ed2f.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_7ed2f.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_7ed2f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ed2f.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=ldap_init -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_7ed2f.dir/CheckFunctionExists.c.o -o cmTC_7ed2f  -lldap -latomic -lm 
+ld.lld: error: unable to find library -lldap
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_7ed2f.dir/build.make:100: cmTC_7ed2f] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_7ed2f/fast] Error 2
+
+
+
+Determining if the function ber_init exists in the lber failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_3e39a/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_3e39a.dir/build.make CMakeFiles/cmTC_3e39a.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3e39a.dir/CheckFunctionExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=ber_init -fPIE -MD -MT CMakeFiles/cmTC_3e39a.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_3e39a.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_3e39a.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_3e39a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3e39a.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=ber_init -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_3e39a.dir/CheckFunctionExists.c.o -o cmTC_3e39a  -llber -latomic -lm 
+ld.lld: error: unable to find library -llber
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_3e39a.dir/build.make:100: cmTC_3e39a] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_3e39a/fast] Error 2
+
+
+
+Determining if files ;ldap.h exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_e7e89/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_e7e89.dir/build.make CMakeFiles/cmTC_e7e89.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e7e89.dir/HAVE_LDAP_H.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_e7e89.dir/HAVE_LDAP_H.c.o -MF CMakeFiles/cmTC_e7e89.dir/HAVE_LDAP_H.c.o.d -o CMakeFiles/cmTC_e7e89.dir/HAVE_LDAP_H.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_LDAP_H.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_LDAP_H.c:2:10: fatal error: 'ldap.h' file not found
+    2 | #include <ldap.h>
+      |          ^~~~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_e7e89.dir/build.make:79: CMakeFiles/cmTC_e7e89.dir/HAVE_LDAP_H.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_e7e89/fast] Error 2
+
+
+Source:
+/* */
+#include <ldap.h>
+
+
+int main(void){return 0;}
+
+Determining if files ;lber.h exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_98c9f/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_98c9f.dir/build.make CMakeFiles/cmTC_98c9f.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_98c9f.dir/HAVE_LBER_H.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_98c9f.dir/HAVE_LBER_H.c.o -MF CMakeFiles/cmTC_98c9f.dir/HAVE_LBER_H.c.o.d -o CMakeFiles/cmTC_98c9f.dir/HAVE_LBER_H.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_LBER_H.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_LBER_H.c:2:10: fatal error: 'lber.h' file not found
+    2 | #include <lber.h>
+      |          ^~~~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_98c9f.dir/build.make:79: CMakeFiles/cmTC_98c9f.dir/HAVE_LBER_H.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_98c9f/fast] Error 2
+
+
+Source:
+/* */
+#include <lber.h>
+
+
+int main(void){return 0;}
+
+Determining if the function idn2_lookup_ul exists in the idn2 failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_9d883/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_9d883.dir/build.make CMakeFiles/cmTC_9d883.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9d883.dir/CheckFunctionExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=idn2_lookup_ul -fPIE -MD -MT CMakeFiles/cmTC_9d883.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_9d883.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_9d883.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_9d883
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9d883.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=idn2_lookup_ul -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_9d883.dir/CheckFunctionExists.c.o -o cmTC_9d883  -lidn2 -latomic -lm 
+ld.lld: error: unable to find library -lidn2
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_9d883.dir/build.make:100: cmTC_9d883] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_9d883/fast] Error 2
+
+
+
+Determining if files ;sys/filio.h exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_c07e4/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c07e4.dir/build.make CMakeFiles/cmTC_c07e4.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c07e4.dir/HAVE_SYS_FILIO_H.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_c07e4.dir/HAVE_SYS_FILIO_H.c.o -MF CMakeFiles/cmTC_c07e4.dir/HAVE_SYS_FILIO_H.c.o.d -o CMakeFiles/cmTC_c07e4.dir/HAVE_SYS_FILIO_H.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_SYS_FILIO_H.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_SYS_FILIO_H.c:2:10: fatal error: 'sys/filio.h' file not found
+    2 | #include <sys/filio.h>
+      |          ^~~~~~~~~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_c07e4.dir/build.make:79: CMakeFiles/cmTC_c07e4.dir/HAVE_SYS_FILIO_H.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_c07e4/fast] Error 2
+
+
+Source:
+/* */
+#include <sys/filio.h>
+
+
+int main(void){return 0;}
+
+Determining if files sys/wait.h;sys/ioctl.h;sys/param.h;sys/poll.h;sys/resource.h;sys/select.h;sys/socket.h;sys/sockio.h exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_2ef70/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_2ef70.dir/build.make CMakeFiles/cmTC_2ef70.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2ef70.dir/HAVE_SYS_SOCKIO_H.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_2ef70.dir/HAVE_SYS_SOCKIO_H.c.o -MF CMakeFiles/cmTC_2ef70.dir/HAVE_SYS_SOCKIO_H.c.o.d -o CMakeFiles/cmTC_2ef70.dir/HAVE_SYS_SOCKIO_H.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_SYS_SOCKIO_H.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_SYS_SOCKIO_H.c:9:10: fatal error: 'sys/sockio.h' file not found
+    9 | #include <sys/sockio.h>
+      |          ^~~~~~~~~~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_2ef70.dir/build.make:79: CMakeFiles/cmTC_2ef70.dir/HAVE_SYS_SOCKIO_H.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_2ef70/fast] Error 2
+
+
+Source:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/sockio.h>
+
+
+int main(void){return 0;}
+
+Determining if files sys/wait.h;sys/ioctl.h;sys/param.h;sys/poll.h;sys/resource.h;sys/select.h;sys/socket.h;sys/stat.h;sys/time.h;sys/types.h;sys/un.h;sys/utime.h exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_b49b2/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_b49b2.dir/build.make CMakeFiles/cmTC_b49b2.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b49b2.dir/HAVE_SYS_UTIME_H.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_b49b2.dir/HAVE_SYS_UTIME_H.c.o -MF CMakeFiles/cmTC_b49b2.dir/HAVE_SYS_UTIME_H.c.o.d -o CMakeFiles/cmTC_b49b2.dir/HAVE_SYS_UTIME_H.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_SYS_UTIME_H.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_SYS_UTIME_H.c:13:10: fatal error: 'sys/utime.h' file not found
+   13 | #include <sys/utime.h>
+      |          ^~~~~~~~~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_b49b2.dir/build.make:79: CMakeFiles/cmTC_b49b2.dir/HAVE_SYS_UTIME_H.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_b49b2/fast] Error 2
+
+
+Source:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/utime.h>
+
+
+int main(void){return 0;}
+
+Determining if files sys/wait.h;sys/ioctl.h;sys/param.h;sys/poll.h;sys/resource.h;sys/select.h;sys/socket.h;sys/stat.h;sys/time.h;sys/types.h;sys/un.h;sys/xattr.h;arpa/inet.h;dirent.h;fcntl.h;ifaddrs.h;io.h exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_c7165/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c7165.dir/build.make CMakeFiles/cmTC_c7165.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c7165.dir/HAVE_IO_H.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_c7165.dir/HAVE_IO_H.c.o -MF CMakeFiles/cmTC_c7165.dir/HAVE_IO_H.c.o.d -o CMakeFiles/cmTC_c7165.dir/HAVE_IO_H.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_IO_H.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_IO_H.c:18:10: fatal error: 'io.h' file not found
+   18 | #include <io.h>
+      |          ^~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_c7165.dir/build.make:79: CMakeFiles/cmTC_c7165.dir/HAVE_IO_H.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_c7165/fast] Error 2
+
+
+Source:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <io.h>
+
+
+int main(void){return 0;}
+
+Determining if files sys/wait.h;sys/ioctl.h;sys/param.h;sys/poll.h;sys/resource.h;sys/select.h;sys/socket.h;sys/stat.h;sys/time.h;sys/types.h;sys/un.h;sys/xattr.h;arpa/inet.h;dirent.h;fcntl.h;ifaddrs.h;libgen.h;locale.h;net/if.h;netdb.h;netinet/in.h;netinet/tcp.h;netinet/udp.h;poll.h;pwd.h;stdatomic.h;stdbool.h;strings.h;stropts.h exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0bbac/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0bbac.dir/build.make CMakeFiles/cmTC_0bbac.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0bbac.dir/HAVE_STROPTS_H.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_0bbac.dir/HAVE_STROPTS_H.c.o -MF CMakeFiles/cmTC_0bbac.dir/HAVE_STROPTS_H.c.o.d -o CMakeFiles/cmTC_0bbac.dir/HAVE_STROPTS_H.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_STROPTS_H.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckIncludeFiles/HAVE_STROPTS_H.c:30:10: fatal error: 'stropts.h' file not found
+   30 | #include <stropts.h>
+      |          ^~~~~~~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_0bbac.dir/build.make:79: CMakeFiles/cmTC_0bbac.dir/HAVE_STROPTS_H.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_0bbac/fast] Error 2
+
+
+Source:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <stropts.h>
+
+
+int main(void){return 0;}
+
+Determining size of __int64 failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_668f0/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_668f0.dir/build.make CMakeFiles/cmTC_668f0.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_668f0.dir/SIZEOF___INT64.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_668f0.dir/SIZEOF___INT64.c.o -MF CMakeFiles/cmTC_668f0.dir/SIZEOF___INT64.c.o.d -o CMakeFiles/cmTC_668f0.dir/SIZEOF___INT64.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:29:12: error: use of undeclared identifier '__int64'
+   29 |   ('0' + ((SIZE / 10000)%10)),
+      |            ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:27:22: note: expanded from macro 'SIZE'
+   27 | #define SIZE (sizeof(__int64))
+      |                      ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:30:12: error: use of undeclared identifier '__int64'
+   30 |   ('0' + ((SIZE / 1000)%10)),
+      |            ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:27:22: note: expanded from macro 'SIZE'
+   27 | #define SIZE (sizeof(__int64))
+      |                      ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:31:12: error: use of undeclared identifier '__int64'
+   31 |   ('0' + ((SIZE / 100)%10)),
+      |            ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:27:22: note: expanded from macro 'SIZE'
+   27 | #define SIZE (sizeof(__int64))
+      |                      ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:32:12: error: use of undeclared identifier '__int64'
+   32 |   ('0' + ((SIZE / 10)%10)),
+      |            ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:27:22: note: expanded from macro 'SIZE'
+   27 | #define SIZE (sizeof(__int64))
+      |                      ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:33:12: error: use of undeclared identifier '__int64'
+   33 |   ('0' +  (SIZE    % 10)),
+      |            ^
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:27:22: note: expanded from macro 'SIZE'
+   27 | #define SIZE (sizeof(__int64))
+      |                      ^
+5 errors generated.
+gmake[1]: *** [CMakeFiles/cmTC_668f0.dir/build.make:79: CMakeFiles/cmTC_668f0.dir/SIZEOF___INT64.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_668f0/fast] Error 2
+
+
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CheckTypeSize/SIZEOF___INT64.c:
+#include <sys/types.h>
+#include <stdint.h>
+#include <stddef.h>
+
+
+#undef KEY
+#if defined(__i386)
+# define KEY '_','_','i','3','8','6'
+#elif defined(__x86_64)
+# define KEY '_','_','x','8','6','_','6','4'
+#elif defined(__PPC64__)
+# define KEY '_','_','P','P','C','6','4','_','_'
+#elif defined(__ppc64__)
+# define KEY '_','_','p','p','c','6','4','_','_'
+#elif defined(__PPC__)
+# define KEY '_','_','P','P','C','_','_'
+#elif defined(__ppc__)
+# define KEY '_','_','p','p','c','_','_'
+#elif defined(__aarch64__)
+# define KEY '_','_','a','a','r','c','h','6','4','_','_'
+#elif defined(__ARM_ARCH_7A__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','A','_','_'
+#elif defined(__ARM_ARCH_7S__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','S','_','_'
+#endif
+
+#define SIZE (sizeof(__int64))
+static char info_size[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)),
+  ']',
+#ifdef KEY
+  ' ','k','e','y','[', KEY, ']',
+#endif
+  '\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_size[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining if the stricmp exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_f10de/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_f10de.dir/build.make CMakeFiles/cmTC_f10de.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f10de.dir/CheckSymbolExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_f10de.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_f10de.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_f10de.dir/CheckSymbolExists.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:40:19: error: use of undeclared identifier 'stricmp'
+   40 |   return ((int*)(&stricmp))[argc];
+      |                   ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_f10de.dir/build.make:79: CMakeFiles/cmTC_f10de.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_f10de/fast] Error 2
+
+
+File /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <termio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <utime.h>
+#include <string.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef stricmp
+  return ((int*)(&stricmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strcmpi exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_a98f7/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_a98f7.dir/build.make CMakeFiles/cmTC_a98f7.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a98f7.dir/CheckSymbolExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_a98f7.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_a98f7.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_a98f7.dir/CheckSymbolExists.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:40:19: error: use of undeclared identifier 'strcmpi'; did you mean 'strcmp'?
+   40 |   return ((int*)(&strcmpi))[argc];
+      |                   ^~~~~~~
+      |                   strcmp
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/string.h:111:5: note: 'strcmp' declared here
+  111 | int strcmp(const char* _Nonnull __lhs, const char* _Nonnull __rhs) __attribute_pure__;
+      |     ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_a98f7.dir/build.make:79: CMakeFiles/cmTC_a98f7.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_a98f7/fast] Error 2
+
+
+File /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <termio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <utime.h>
+#include <string.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strcmpi
+  return ((int*)(&strcmpi))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the closesocket exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_30a63/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_30a63.dir/build.make CMakeFiles/cmTC_30a63.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_30a63.dir/CheckSymbolExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_30a63.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_30a63.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_30a63.dir/CheckSymbolExists.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:39:19: error: use of undeclared identifier 'closesocket'
+   39 |   return ((int*)(&closesocket))[argc];
+      |                   ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_30a63.dir/build.make:79: CMakeFiles/cmTC_30a63.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_30a63/fast] Error 2
+
+
+File /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <termio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <utime.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef closesocket
+  return ((int*)(&closesocket))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the getpass_r exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_4417c/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_4417c.dir/build.make CMakeFiles/cmTC_4417c.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4417c.dir/CheckSymbolExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_4417c.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_4417c.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_4417c.dir/CheckSymbolExists.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:39:19: error: use of undeclared identifier 'getpass_r'
+   39 |   return ((int*)(&getpass_r))[argc];
+      |                   ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_4417c.dir/build.make:79: CMakeFiles/cmTC_4417c.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_4417c/fast] Error 2
+
+
+File /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <termio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <utime.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getpass_r
+  return ((int*)(&getpass_r))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the getifaddrs exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_7f68d/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_7f68d.dir/build.make CMakeFiles/cmTC_7f68d.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7f68d.dir/CheckSymbolExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_7f68d.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_7f68d.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_7f68d.dir/CheckSymbolExists.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:40:19: error: use of undeclared identifier 'getifaddrs'
+   40 |   return ((int*)(&getifaddrs))[argc];
+      |                   ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_7f68d.dir/build.make:79: CMakeFiles/cmTC_7f68d.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_7f68d/fast] Error 2
+
+
+File /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <termio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <utime.h>
+#include <stdlib.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getifaddrs
+  return ((int*)(&getifaddrs))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the _fseeki64 exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_23d05/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_23d05.dir/build.make CMakeFiles/cmTC_23d05.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_23d05.dir/CheckSymbolExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_23d05.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_23d05.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_23d05.dir/CheckSymbolExists.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:40:19: error: use of undeclared identifier '_fseeki64'; did you mean 'lseek64'?
+   40 |   return ((int*)(&_fseeki64))[argc];
+      |                   ^~~~~~~~~
+      |                   lseek64
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/unistd.h:347:9: note: 'lseek64' declared here
+  347 | off64_t lseek64(int __fd, off64_t __offset, int __whence);
+      |         ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_23d05.dir/build.make:79: CMakeFiles/cmTC_23d05.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_23d05/fast] Error 2
+
+
+File /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <termio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <utime.h>
+#include <stdio.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef _fseeki64
+  return ((int*)(&_fseeki64))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the setmode exist failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_ee71c/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ee71c.dir/build.make CMakeFiles/cmTC_ee71c.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ee71c.dir/CheckSymbolExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough  -fPIE -MD -MT CMakeFiles/cmTC_ee71c.dir/CheckSymbolExists.c.o -MF CMakeFiles/cmTC_ee71c.dir/CheckSymbolExists.c.o.d -o CMakeFiles/cmTC_ee71c.dir/CheckSymbolExists.c.o -c /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:39:19: error: use of undeclared identifier 'setmode'
+   39 |   return ((int*)(&setmode))[argc];
+      |                   ^
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_ee71c.dir/build.make:79: CMakeFiles/cmTC_ee71c.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_ee71c/fast] Error 2
+
+
+File /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/wait.h>
+#include <sys/ioctl.h>
+#include <sys/param.h>
+#include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <ifaddrs.h>
+#include <libgen.h>
+#include <locale.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/udp.h>
+#include <poll.h>
+#include <pwd.h>
+#include <stdatomic.h>
+#include <stdbool.h>
+#include <strings.h>
+#include <termio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <utime.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef setmode
+  return ((int*)(&setmode))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the function mach_absolute_time exists failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_74045/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_74045.dir/build.make CMakeFiles/cmTC_74045.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_74045.dir/CheckFunctionExists.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=mach_absolute_time -fPIE -MD -MT CMakeFiles/cmTC_74045.dir/CheckFunctionExists.c.o -MF CMakeFiles/cmTC_74045.dir/CheckFunctionExists.c.o.d -o CMakeFiles/cmTC_74045.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_74045
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_74045.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DCHECK_FUNCTION_EXISTS=mach_absolute_time -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_74045.dir/CheckFunctionExists.c.o -o cmTC_74045  -latomic -lm 
+ld.lld: error: undefined symbol: mach_absolute_time
+>>> referenced by CheckFunctionExists.c:17 (/usr/share/cmake-3.22/Modules/CheckFunctionExists.c:17)
+>>>               CMakeFiles/cmTC_74045.dir/CheckFunctionExists.c.o:(main)
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_74045.dir/build.make:100: cmTC_74045] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_74045/fast] Error 2
+
+
+
+Performing Test HAVE_FSETXATTR_6 failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_36227/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_36227.dir/build.make CMakeFiles/cmTC_36227.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_36227.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_FSETXATTR_6  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_36227.dir/CurlTests.c.o -MF CMakeFiles/cmTC_36227.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_36227.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:356:28: error: too many arguments to function call, expected 5, have 6
+  356 |   fsetxattr(0, 0, 0, 0, 0, 0);
+      |   ~~~~~~~~~                ^
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/sys/xattr.h:55:5: note: 'fsetxattr' declared here
+   55 | int fsetxattr(int __fd, const char* _Nonnull __name, const void* _Nullable __value, size_t __size, int __flags);
+      |     ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_36227.dir/build.make:79: CMakeFiles/cmTC_36227.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_36227/fast] Error 2
+
+
+Performing Test HAVE_IOCTLSOCKET failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_1d058/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_1d058.dir/build.make CMakeFiles/cmTC_1d058.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1d058.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_IOCTLSOCKET  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_1d058.dir/CurlTests.c.o -MF CMakeFiles/cmTC_1d058.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_1d058.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:177:25: error: call to undeclared function 'ioctlsocket'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  177 |   unsigned long flags = ioctlsocket(socket, FIONBIO, &flags);
+      |                         ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:177:45: error: use of undeclared identifier 'FIONBIO'
+  177 |   unsigned long flags = ioctlsocket(socket, FIONBIO, &flags);
+      |                                             ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:178:3: warning: empty expression statement has no effect; remove unnecessary ';' to silence this warning [-Wextra-semi-stmt]
+  178 |   ;
+      |   ^
+1 warning and 2 errors generated.
+gmake[1]: *** [CMakeFiles/cmTC_1d058.dir/build.make:79: CMakeFiles/cmTC_1d058.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_1d058/fast] Error 2
+
+
+Performing Test HAVE_IOCTLSOCKET_CAMEL failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0c2cb/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0c2cb.dir/build.make CMakeFiles/cmTC_0c2cb.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0c2cb.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_IOCTLSOCKET_CAMEL  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_0c2cb.dir/CurlTests.c.o -MF CMakeFiles/cmTC_0c2cb.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_0c2cb.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:195:11: error: call to undeclared function 'IoctlSocket'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  195 |   if(0 != IoctlSocket(0, 0, 0))
+      |           ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:197:3: warning: empty expression statement has no effect; remove unnecessary ';' to silence this warning [-Wextra-semi-stmt]
+  197 |   ;
+      |   ^
+1 warning and 1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_0c2cb.dir/build.make:79: CMakeFiles/cmTC_0c2cb.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_0c2cb/fast] Error 2
+
+
+Performing Test HAVE_IOCTLSOCKET_CAMEL_FIONBIO failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_809d2/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_809d2.dir/build.make CMakeFiles/cmTC_809d2.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_809d2.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_IOCTLSOCKET_CAMEL_FIONBIO  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_809d2.dir/CurlTests.c.o -MF CMakeFiles/cmTC_809d2.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_809d2.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:214:11: error: call to undeclared function 'IoctlSocket'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  214 |   if(0 != IoctlSocket(0, FIONBIO, &flags))
+      |           ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:214:26: error: use of undeclared identifier 'FIONBIO'
+  214 |   if(0 != IoctlSocket(0, FIONBIO, &flags))
+      |                          ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:216:3: warning: empty expression statement has no effect; remove unnecessary ';' to silence this warning [-Wextra-semi-stmt]
+  216 |   ;
+      |   ^
+1 warning and 2 errors generated.
+gmake[1]: *** [CMakeFiles/cmTC_809d2.dir/build.make:79: CMakeFiles/cmTC_809d2.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_809d2/fast] Error 2
+
+
+Performing Test HAVE_IOCTLSOCKET_FIONBIO failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_c583b/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c583b.dir/build.make CMakeFiles/cmTC_c583b.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c583b.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_IOCTLSOCKET_FIONBIO  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_c583b.dir/CurlTests.c.o -MF CMakeFiles/cmTC_c583b.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_c583b.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:232:11: error: call to undeclared function 'ioctlsocket'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  232 |   if(0 != ioctlsocket(0, FIONBIO, &flags))
+      |           ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:232:26: error: use of undeclared identifier 'FIONBIO'
+  232 |   if(0 != ioctlsocket(0, FIONBIO, &flags))
+      |                          ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:234:3: warning: empty expression statement has no effect; remove unnecessary ';' to silence this warning [-Wextra-semi-stmt]
+  234 |   ;
+      |   ^
+1 warning and 2 errors generated.
+gmake[1]: *** [CMakeFiles/cmTC_c583b.dir/build.make:79: CMakeFiles/cmTC_c583b.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_c583b/fast] Error 2
+
+
+Performing Test HAVE_SETSOCKOPT_SO_NONBLOCK failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_d6dcf/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_d6dcf.dir/build.make CMakeFiles/cmTC_d6dcf.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d6dcf.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_SETSOCKOPT_SO_NONBLOCK  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_d6dcf.dir/CurlTests.c.o -MF CMakeFiles/cmTC_d6dcf.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_d6dcf.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:314:37: error: use of undeclared identifier 'SO_NONBLOCK'
+  314 |   if(0 != setsockopt(0, SOL_SOCKET, SO_NONBLOCK, 0, 0))
+      |                                     ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:316:3: warning: empty expression statement has no effect; remove unnecessary ';' to silence this warning [-Wextra-semi-stmt]
+  316 |   ;
+      |   ^
+1 warning and 1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_d6dcf.dir/build.make:79: CMakeFiles/cmTC_d6dcf.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_d6dcf/fast] Error 2
+
+
+Performing Test HAVE_O_NONBLOCK failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_005b1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_005b1.dir/build.make CMakeFiles/cmTC_005b1.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_005b1.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_O_NONBLOCK  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_005b1.dir/CurlTests.c.o -MF CMakeFiles/cmTC_005b1.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_005b1.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:430:7: warning: ISO C requires a translation unit to contain at least one declaration [-Wempty-translation-unit]
+  430 | #endif
+      |       ^
+1 warning generated.
+Linking C executable cmTC_005b1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_005b1.dir/link.txt --verbose=1
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_O_NONBLOCK  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments    CMakeFiles/cmTC_005b1.dir/CurlTests.c.o -o cmTC_005b1  -latomic -lm 
+ld.lld: error: undefined symbol: main
+>>> referenced by crtbegin.c
+>>>               /home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crtbegin_dynamic.o:(_start_main)
+>>> referenced by crtbegin.c
+>>>               /home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/23/crtbegin_dynamic.o:(_start_main)
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+gmake[1]: *** [CMakeFiles/cmTC_005b1.dir/build.make:100: cmTC_005b1] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_005b1/fast] Error 2
+
+
+Performing Test HAVE_GETHOSTBYNAME_R_3 failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_3848d/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_3848d.dir/build.make CMakeFiles/cmTC_3848d.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3848d.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_GETHOSTBYNAME_R_3  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_3848d.dir/CurlTests.c.o -MF CMakeFiles/cmTC_3848d.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_3848d.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:73:9: warning: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+   73 |   char *address = "example.com";
+      |         ^         ~~~~~~~~~~~~~
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:80:23: error: variable has incomplete type 'struct hostent_data'
+   80 |   struct hostent_data hdata;
+      |                       ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:80:10: note: forward declaration of 'struct hostent_data'
+   80 |   struct hostent_data hdata;
+      |          ^
+1 warning and 1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_3848d.dir/build.make:79: CMakeFiles/cmTC_3848d.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_3848d/fast] Error 2
+
+
+Performing Test HAVE_GETHOSTBYNAME_R_5 failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_f3ceb/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_f3ceb.dir/build.make CMakeFiles/cmTC_f3ceb.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f3ceb.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_GETHOSTBYNAME_R_5  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_f3ceb.dir/CurlTests.c.o -MF CMakeFiles/cmTC_f3ceb.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_f3ceb.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:73:9: warning: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+   73 |   char *address = "example.com";
+      |         ^         ~~~~~~~~~~~~~
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:95:60: error: too few arguments to function call, expected 6, have 5
+   95 |   rc = gethostbyname_r(address, &h, buffer, 8192, &h_errnop);
+      |        ~~~~~~~~~~~~~~~                                     ^
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/netdb.h:221:5: note: 'gethostbyname_r' declared here
+  221 | int gethostbyname_r(const char* _Nonnull __name, struct hostent* _Nonnull __ret, char* _Nonnull __buf, size_t __buf_size, struct hostent* _Nullable * _Nonnull __result, int* _Nonnull __h_errno_ptr);
+      |     ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning and 1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_f3ceb.dir/build.make:79: CMakeFiles/cmTC_f3ceb.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_f3ceb/fast] Error 2
+
+
+Performing Test HAVE_GETHOSTBYNAME_R_3_REENTRANT failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_40972/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_40972.dir/build.make CMakeFiles/cmTC_40972.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_40972.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_GETHOSTBYNAME_R_3_REENTRANT  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_40972.dir/CurlTests.c.o -MF CMakeFiles/cmTC_40972.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_40972.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:73:9: warning: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+   73 |   char *address = "example.com";
+      |         ^         ~~~~~~~~~~~~~
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:80:23: error: variable has incomplete type 'struct hostent_data'
+   80 |   struct hostent_data hdata;
+      |                       ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:80:10: note: forward declaration of 'struct hostent_data'
+   80 |   struct hostent_data hdata;
+      |          ^
+1 warning and 1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_40972.dir/build.make:79: CMakeFiles/cmTC_40972.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_40972/fast] Error 2
+
+
+Performing Test HAVE_GETHOSTBYNAME_R_5_REENTRANT failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_398ca/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_398ca.dir/build.make CMakeFiles/cmTC_398ca.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_398ca.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_GETHOSTBYNAME_R_5_REENTRANT  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_398ca.dir/CurlTests.c.o -MF CMakeFiles/cmTC_398ca.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_398ca.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:73:9: warning: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+   73 |   char *address = "example.com";
+      |         ^         ~~~~~~~~~~~~~
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:95:60: error: too few arguments to function call, expected 6, have 5
+   95 |   rc = gethostbyname_r(address, &h, buffer, 8192, &h_errnop);
+      |        ~~~~~~~~~~~~~~~                                     ^
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/netdb.h:221:5: note: 'gethostbyname_r' declared here
+  221 | int gethostbyname_r(const char* _Nonnull __name, struct hostent* _Nonnull __ret, char* _Nonnull __buf, size_t __buf_size, struct hostent* _Nullable * _Nonnull __result, int* _Nonnull __h_errno_ptr);
+      |     ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning and 1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_398ca.dir/build.make:79: CMakeFiles/cmTC_398ca.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_398ca/fast] Error 2
+
+
+Performing Test HAVE_GLIBC_STRERROR_R failed with the following output:
+Change Dir: /home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_c98eb/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c98eb.dir/build.make CMakeFiles/cmTC_c98eb.dir/build
+gmake[1]: Entering directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c98eb.dir/CurlTests.c.o
+/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --target=aarch64-none-linux-android23 --sysroot=/home/buji/Android/Sdk/ndk/27.0.11902837/toolchains/llvm/prebuilt/linux-x86_64/sysroot   -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -Wextra -Wall -pedantic -Wbad-function-cast -Wconversion -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-long-long -Wno-multichar -Wpointer-arith -Wshadow -Wsign-compare -Wundef -Wunused -Wwrite-strings -Waddress -Wattributes -Wcast-align -Wdeclaration-after-statement -Wdiv-by-zero -Wempty-body -Wendif-labels -Wfloat-equal -Wformat-security -Wignored-qualifiers -Wmissing-field-initializers -Wmissing-noreturn -Wno-format-nonliteral -Wno-system-headers -Wold-style-definition -Wredundant-decls -Wsign-conversion -Wno-error=sign-conversion -Wstrict-prototypes -Wtype-limits -Wunreachable-code -Wunused-parameter -Wvla -Wshift-sign-overflow -Wshorten-64-to-32 -Wlanguage-extension-token -Wformat=2 -Wdouble-promotion -Wenum-conversion -Wpragmas -Wunused-const-variable -Wunreachable-code-break -Wheader-guard -Wsometimes-uninitialized -Wcomma -Wmissing-variable-declarations -Wassign-enum -Wextra-semi-stmt -Wimplicit-fallthrough -DHAVE_GLIBC_STRERROR_R  -DHAVE_SYS_WAIT_H -DHAVE_SYS_IOCTL_H -DHAVE_SYS_PARAM_H -DHAVE_SYS_POLL_H -DHAVE_SYS_RESOURCE_H -DHAVE_SYS_SELECT_H -DHAVE_SYS_SOCKET_H -DHAVE_SYS_STAT_H -DHAVE_SYS_TIME_H -DHAVE_SYS_TYPES_H -DHAVE_SYS_UN_H -DHAVE_SYS_XATTR_H -DHAVE_ARPA_INET_H -DHAVE_DIRENT_H -DHAVE_FCNTL_H -DHAVE_IFADDRS_H -DHAVE_LIBGEN_H -DHAVE_LOCALE_H -DHAVE_NET_IF_H -DHAVE_NETDB_H -DHAVE_NETINET_IN_H -DHAVE_NETINET_TCP_H -DHAVE_NETINET_UDP_H -DHAVE_POLL_H -DHAVE_PWD_H -DHAVE_STDATOMIC_H -DHAVE_STDBOOL_H -DHAVE_STRINGS_H -DHAVE_TERMIO_H -DHAVE_TERMIOS_H -DHAVE_UNISTD_H -DHAVE_UTIME_H -fPIE -MD -MT CMakeFiles/cmTC_c98eb.dir/CurlTests.c.o -MF CMakeFiles/cmTC_c98eb.dir/CurlTests.c.o.d -o CMakeFiles/cmTC_c98eb.dir/CurlTests.c.o -c /home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:325:17: warning: unused parameter 'c' [-Wunused-parameter]
+  325 | void check(char c) {}
+      |                 ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:325:6: warning: no previous prototype for function 'check' [-Wmissing-prototypes]
+  325 | void check(char c) {}
+      |      ^
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:325:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  325 | void check(char c) {}
+      | ^
+      | static 
+/home/buji/code/bitbi/miner/depends/curl/CMake/CurlTests.c:331:51: error: subscripted value is not an array, pointer, or vector
+  331 |   check(strerror_r(EACCES, buffer, sizeof(buffer))[0]);
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+2 warnings and 1 error generated.
+gmake[1]: *** [CMakeFiles/cmTC_c98eb.dir/build.make:79: CMakeFiles/cmTC_c98eb.dir/CurlTests.c.o] Error 1
+gmake[1]: Leaving directory '/home/buji/code/bitbi/miner/depends/curl/build-android/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:127: cmTC_c98eb/fast] Error 2
+
+
