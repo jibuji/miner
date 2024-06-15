@@ -1414,7 +1414,7 @@ start:
 	}
 
 	applog(LOG_INFO, "Long-polling activated for %s", lp_url);
-
+	uint64_t lastWorkHeight = 0;
 	while (1)
 	{
 		json_t *val, *res, *soval;
@@ -1443,6 +1443,20 @@ start:
 			res = json_object_get(val, "result");
 			soval = json_object_get(res, "submitold");
 			submit_old = soval ? json_is_true(soval) : false;
+			// get the height of the last work
+			json_t *height = json_object_get(res, "height");
+			if (height)
+			{
+				uint64_t curWorkHeight = json_integer_value(height);
+				if (curWorkHeight <= lastWorkHeight)
+				{
+					applog(LOG_INFO, "LONGPOLL pushed old work, waiting for 10s");
+					json_decref(val);
+					sleep(10);
+					continue;
+				}
+				lastWorkHeight = curWorkHeight;
+			}
 			pthread_mutex_lock(&g_work_lock);
 			work_free(&g_work);
 			if (have_gbt)
