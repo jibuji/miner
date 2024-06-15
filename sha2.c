@@ -13,14 +13,17 @@
 #include "randomx.h"
 #include <string.h>
 #include <inttypes.h>
-#include <cpuid.h>
 #include "sha256.h"
 
 #if defined(USE_ASM) &&                            \
-	(defined(__x86_64__) ||                        \
-	 (defined(__arm__) && defined(__APCS_32__)) || \
-	 (defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)))
+    (defined(__x86_64__) ||                        \
+     (defined(__arm__) && defined(__APCS_32__)) || \
+     (defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)))
 #define EXTERN_SHA256
+#endif
+
+#ifdef __x86_64__
+#include <cpuid.h>
 #endif
 
 static const uint32_t sha256_h[8] = {
@@ -743,7 +746,7 @@ void randomx_init_dataset_thread( dataset_init_thread_args* args) {
 	randomx_init_dataset(args->dataset, args->cache, args->startItem, args->itemCount);
 }
 
-
+#ifdef __x86_64__
 static inline bool isAVX2Supported() {
     unsigned int eax, ebx, ecx, edx;
     __get_cpuid(1, &eax, &ebx, &ecx, &edx);
@@ -764,7 +767,14 @@ static inline bool isSSSE3Supported() {
     __get_cpuid(1, &eax, &ebx, &ecx, &edx);
     return ecx & bit_SSSE3;
 }
-
+#else
+static inline bool isAVX2Supported() {
+	return false;
+}
+static inline bool isSSSE3Supported() {
+	return false;
+}
+#endif
 
 int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
 					 uint32_t max_nonce, unsigned long *hashes_done)

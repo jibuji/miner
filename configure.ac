@@ -1,5 +1,41 @@
 AC_INIT([cpuminer], [2.5.1])
+# Check if we're cross-compiling for the NDK
+if test "$CROSS_COMPILE_FOR_NDK" = "yes"; then
+    # Set the path to your NDK
+    NDK=/home/buji/Android/Sdk/ndk/27.0.11902837
 
+    # Set the target architecture
+    ARCH=aarch64
+
+    # Set the target API level
+    API=23
+
+    # Set the toolchain and sysroot
+    TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64
+    SYSROOT=$TOOLCHAIN/sysroot
+
+    # Set the cross-compile prefix
+    TARGET=$ARCH-linux-android
+
+    # Set the compiler and linker flags
+    CC="$TOOLCHAIN/bin/$TARGET$API-clang"
+    CXX="$TOOLCHAIN/bin/$TARGET$API-clang++"
+    CCLD="$TOOLCHAIN/bin/$TARGET$API-clang++"
+    CPP="$TOOLCHAIN/bin/$TARGET$API-clang -E"
+    LD="$TOOLCHAIN/bin/ld"
+    AS="$TOOLCHAIN/bin/llvm-as"
+    AR="$TOOLCHAIN/bin/llvm-ar"
+    RANLIB="$TOOLCHAIN/bin/llvm-ranlib"
+    STRIP="$TOOLCHAIN/bin/llvm-strip"
+
+    # Export the variables
+    export CC CXX CPP LD AS AR RANLIB STRIP
+else
+    # Set CCLD as g++ when not cross-compiling for the NDK
+    CCLD=g++
+fi
+
+AC_SUBST(CCLD)
 AC_PREREQ([2.59c])
 AC_CANONICAL_SYSTEM
 AC_CONFIG_SRCDIR([cpu-miner.c])
