@@ -30,6 +30,8 @@ jobs:
         cmake ..
         make -j$(sysctl -n hw.logicalcpu)
         ls $POW_HOME/pow-${{matrix.config.pow_version}}/build
+        mkdir -p /usr/local/share/aclocal
+        curl -o /usr/local/share/aclocal/curl.m4 https://raw.githubusercontent.com/curl/curl/master/acinclude.m4
 
     - name: Checkout repository
       uses: actions/checkout@v4
