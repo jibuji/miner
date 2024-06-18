@@ -57,7 +57,7 @@ jobs:
 
     - name: Compress artifacts
       run: |
-        tar -czvf ubuntu-${{ matrix.config.os }}.tar.gz -C ./minerd
+        tar -czvf ubuntu-${{ matrix.config.os }}.tar.gz ./minerd
 
 
     - name: Upload artifact
