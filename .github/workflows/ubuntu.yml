@@ -30,6 +30,7 @@ jobs:
         mkdir build
         cd build
         cmake ..
+        ls $POW_HOME/pow-${{matrix.config.pow_version}}/build
 
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -42,6 +43,7 @@ jobs:
         ./nomacro.pl
         POW_HOME=$HOME/pow/pow-${{matrix.config.pow_version}}
         ls $POW_HOME
+        ls $POW_HOME/build
         ./configure CPPFLAGS=" -I$POW_HOME/src" LIBS="-L$POW_HOME/build -lrandomx"
         make -j$(nproc)
 
@@ -51,7 +53,7 @@ jobs:
       with:
         name: config.log
         path: /home/runner/work/miner/miner/config.log
-        
+
     - name: Compress artifacts
       run: |
         tar -czvf ubuntu-${{ matrix.config.os }}.tar.gz -C ./minerd
