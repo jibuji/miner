@@ -30,6 +30,7 @@ jobs:
         mkdir build
         cd build
         cmake ..
+        make -j$(nproc)
         ls $POW_HOME/pow-${{matrix.config.pow_version}}/build
 
     - name: Checkout repository
