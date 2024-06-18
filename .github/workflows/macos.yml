@@ -38,6 +38,8 @@ jobs:
 
     - name: Build Miner
       run: |
+        find /usr/local -name curl.m4
+        export ACLOCAL_PATH="/usr/local/share/aclocal:$ACLOCAL_PATH"
         ./autogen.sh
         ./nomacro.pl
         POW_HOME=$HOME/pow/pow-${{matrix.config.pow_version}}
