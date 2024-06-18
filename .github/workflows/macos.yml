@@ -19,7 +19,7 @@ jobs:
     steps:
     - name: Install dependencies
       run: |
-        brew install libcurl git cmake
+        brew install curl git cmake
         curl -sL https://codeload.github.com/bitbi-core/pow/zip/refs/tags/v${{matrix.config.pow_version}} -o pow.zip
         POW_HOME=$HOME/pow
         mkdir -p $POW_HOME
