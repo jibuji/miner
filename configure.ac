@@ -156,6 +156,7 @@ else
 	JANSSON_LIBS=-ljansson
 fi
 
+m4_pattern_allow([AC_MSG_ERROR])
 LIBCURL_CHECK_CONFIG(, 7.15.2, ,
   [AC_MSG_ERROR([Missing required libcurl >= 7.15.2])])
 
