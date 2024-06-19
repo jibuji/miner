@@ -2,8 +2,8 @@ name: Bitbi Miner CI
 
 on:
   push:
-    # tags: [ "v*.*.*" ]
-    branches: ["integrate"]
+    # tags: [ "v*.*.*-test" ]
+    # branches: ["integrate"]
   pull_request:
 
 jobs:
