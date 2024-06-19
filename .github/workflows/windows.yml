@@ -36,8 +36,6 @@ jobs:
         - name: Build Miner
           run: |
             ls /mingw64/bin/*.dll
-            find /mingw64 -name 'libiconv-2.dll'
-            exit 1;
             # install pow
             MINER_SRC_DIR=$(pwd)
             POW_VERSION=${{ matrix.config.pow_version }}
@@ -69,3 +67,11 @@ jobs:
             name: windows-msys2-${{ matrix.config.c }}
             path: |
                 ./minerd*
+                /mingw64/bin/libiconv-2.dll
+                /mingw64/bin/tcl86.dll
+                /mingw64/bin/libbrotlicommon.dll
+                /mingw64/bin/libidn2-0.dll
+                /mingw64/bin/libssh2-1.dll
+                /mingw64/bin/tk86.dll
+                /mingw64/bin/libbrotlidec.dll
+                /mingw64/bin/libintl-8.dll
