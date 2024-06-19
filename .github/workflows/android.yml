@@ -85,7 +85,7 @@ jobs:
         CURL_HOME=$HOME/curl
         ls -l $POW_HOME/build
         ls -l $CURL_HOME/build/lib
-        ls -R $NDK_HOME/toolchains/llvm/prebuilt/
+        # ls -R $NDK_HOME/toolchains/llvm/prebuilt/
         ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx -lz -L$CURL_HOME/build/lib -lcurl" --host=arm64-linux-androideab --disable-assembly
         make -j$(nproc)
 
@@ -95,4 +95,9 @@ jobs:
       with:
         name: config.log
         path: ./config.log
-          
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-${{ matrix.config.abi }}
+        path: ./minerd

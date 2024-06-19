@@ -38,4 +38,9 @@ jobs:
             ./autogen.sh
             ./configure CPPFLAGS=" -I/path-to-pow/src" LIBS="-L/path-to-pow/build -lrandomx"
             make
-    
+
+        - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: windows-msys2-${{ matrix.config.c }}
+            path: ./minerd
