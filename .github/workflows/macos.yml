@@ -57,7 +57,7 @@ jobs:
         ls $POW_HOME
         ls $POW_HOME/build
         ls $CURL_HOME
-        ls $CURL_HOME/build
+        # ls $CURL_HOME/build
         ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
         make -j$(sysctl -n hw.logicalcpu)
 
