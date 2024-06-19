@@ -48,8 +48,6 @@ jobs:
 
     - name: Build Miner
       run: |
-        CURL_HOME=$HOME/curl
-        ls $CURL_HOME/docs/libcurl
         export ACLOCAL_PATH="$(pwd)/m4:$ACLOCAL_PATH"
         echo $ACLOCAL_PATH
         ./autogen.sh
@@ -57,7 +55,6 @@ jobs:
         POW_HOME=$HOME/pow/pow-${{matrix.config.pow_version}}
         ls $POW_HOME
         ls $POW_HOME/build
-        ls $CURL_HOME
         # ls $CURL_HOME/build
         ./configure CPPFLAGS=" -I$POW_HOME/src " LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
         make -j$(sysctl -n hw.logicalcpu)
