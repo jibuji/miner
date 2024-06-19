@@ -311,7 +311,7 @@ jobs:
           with:
             files: |
                 ubuntu-*/*
-                windows-msys2-*/*
+                windows-msys2-*/**
                 macos-*/*
                 android-*/*
 
