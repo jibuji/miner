@@ -35,12 +35,11 @@ jobs:
         CURL_HOME=$HOME/curl
         mv curl-7.64.1 $CURL_HOME
         cd $CURL_HOME
-        mkdir build
-        cd build
-        cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCURL_ENABLE_SSL=OFF ..
-        make -j$(sysctl -n hw.logicalcpu)
-        echo $(pwd)
-        export ACLOCAL_PATH="/usr/local/share/aclocal:$ACLOCAL_PATH"./depends/curl/docs/libcurl/libcurl.m4
+        # mkdir build
+        # cd build
+        # cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCURL_ENABLE_SSL=OFF ..
+        # make -j$(sysctl -n hw.logicalcpu)
+        # echo $(pwd)
 
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -59,7 +58,7 @@ jobs:
         ls $POW_HOME/build
         ls $CURL_HOME
         ls $CURL_HOME/build
-        ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx -L$CURL_HOME/build/lib -lcurl"
+        ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
         make -j$(sysctl -n hw.logicalcpu)
 
     - name: Upload config.log
