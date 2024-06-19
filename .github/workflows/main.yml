@@ -109,6 +109,8 @@ jobs:
             ./configure CPPFLAGS=" -I$POW_HOME/pow-${POW_VERSION}/src" LIBS="-L$POW_HOME/pow-${POW_VERSION}/build -lrandomx"
             make
 
+
+
         - name: Upload config.log
           if: failure() # Only run this step if a previous step failed
           uses: actions/upload-artifact@v2
@@ -288,7 +290,7 @@ jobs:
             files: |
                 ubuntu-*/*
                 windows-msys2-*/*
-                macos-*/macos-*.tar.gz
+                macos-*/*
                 android-*/*
 
           env:

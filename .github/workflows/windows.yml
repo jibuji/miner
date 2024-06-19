@@ -35,6 +35,10 @@ jobs:
     
         - name: Build Miner
           run: |
+            ls /mingw64/bin
+            find /mingw64 -name 'libiconv-2.dll'
+            find /mingw64 -name 'edit.dll'
+            exit 1;
             # install pow
             MINER_SRC_DIR=$(pwd)
             POW_VERSION=${{ matrix.config.pow_version }}
@@ -64,4 +68,5 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: windows-msys2-${{ matrix.config.c }}
-            path: ./minerd*
+            path: |
+                ./minerd*
