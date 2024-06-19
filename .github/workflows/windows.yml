@@ -14,7 +14,7 @@ jobs:
         strategy:
           matrix:
             config:
-              - {c: "gcc", cxx: "g++"}
+              - {c: "gcc", cxx: "g++", pow_version: 0.2.2}
               # - {c: "clang", cxx: "clang++"}
     
         defaults:
@@ -31,13 +31,31 @@ jobs:
           uses: eine/setup-msys2@v2
           with:
             update: true
-            install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-lld mingw-w64-x86_64-cmake make
+            install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-lld mingw-w64-x86_64-cmake make automake autoconf
     
         - name: Build Miner
           run: |
+            # install pow
+            POW_VERSION=${{ matrix.config.pow_version }}
+            curl -sL https://codeload.github.com/bitbi-core/pow/zip/refs/tags/v${POW_VERSION} -o pow.zip
+            POW_HOME=$HOME/pow
+            mkdir -p $POW_HOME
+            unzip pow.zip -d $POW_HOME
+            cd $POW_HOME/pow-${POW_VERSION}
+            mkdir build
+            cd build
+            cmake .. -G "Unix Makefiles" -DCMAKE_C_COMPILER=${{ matrix.config.c }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}
+            make -j$(nproc)
             ./autogen.sh
-            ./configure CPPFLAGS=" -I/path-to-pow/src" LIBS="-L/path-to-pow/build -lrandomx"
+            ./configure CPPFLAGS=" -I$POW_HOME/pow-${POW_VERSION}/src" LIBS="-L$POW_HOME/pow-${POW_VERSION}/build -lrandomx"
             make
+
+        - name: Upload config.log
+          if: failure() # Only run this step if a previous step failed
+          uses: actions/upload-artifact@v2
+          with:
+            name: config.log
+            path: ./config.log
 
         - name: Upload artifact
           uses: actions/upload-artifact@v4
