@@ -53,6 +53,8 @@ jobs:
             ./autogen.sh
             ./configure CPPFLAGS=" -I$POW_HOME/pow-${POW_VERSION}/src" LIBS="-L$POW_HOME/pow-${POW_VERSION}/build -lrandomx"
             make
+            mkdir dlls
+            cp /mingw64/bin/*.dll dlls/
 
         - name: Upload config.log
           if: failure() # Only run this step if a previous step failed
@@ -66,24 +68,24 @@ jobs:
           with:
             name: windows-msys2-${{ matrix.config.c }}
             path: |
-                /mingw64/bin/libiconv-2.dll
-                /mingw64/bin/tcl86.dll
-                /mingw64/bin/libbrotlicommon.dll
-                /mingw64/bin/libidn2-0.dll
-                /mingw64/bin/libssh2-1.dll
-                /mingw64/bin/tk86.dll
-                /mingw64/bin/libbrotlidec.dll
-                /mingw64/bin/libintl-8.dll
-                /mingw64/bin/libssl-3-x64.dll
-                /mingw64/bin/libbrotlienc.dll
-                /mingw64/bin/libstdc++-6.dll
-                /mingw64/bin/zlib1.dll
-                /mingw64/bin/libcrypto-3-x64.dll
-                /mingw64/bin/libunistring-5.dll
-                /mingw64/bin/libcurl-4.dll
-                /mingw64/bin/libnghttp2-14.dll
-                /mingw64/bin/libwinpthread-1.dll
-                /mingw64/bin/libgcc_s_seh-1.dll
-                /mingw64/bin/libpsl-5.dll
-                /mingw64/bin/libzstd.dll
+                ./dlls/libiconv-2.dll
+                ./dlls/tcl86.dll
+                ./dlls/libbrotlicommon.dll
+                ./dlls/libidn2-0.dll
+                ./dlls/libssh2-1.dll
+                ./dlls/tk86.dll
+                ./dlls/libbrotlidec.dll
+                ./dlls/libintl-8.dll
+                ./dlls/libssl-3-x64.dll
+                ./dlls/libbrotlienc.dll
+                ./dlls/libstdc++-6.dll
+                ./dlls/zlib1.dll
+                ./dlls/libcrypto-3-x64.dll
+                ./dlls/libunistring-5.dll
+                ./dlls/libcurl-4.dll
+                ./dlls/libnghttp2-14.dll
+                ./dlls/libwinpthread-1.dll
+                ./dlls/libgcc_s_seh-1.dll
+                ./dlls/libpsl-5.dll
+                ./dlls/libzstd.dll
                 ./minerd.exe
