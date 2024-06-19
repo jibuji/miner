@@ -48,24 +48,6 @@ jobs:
         ./configure CPPFLAGS=" -I$POW_HOME/src" LIBS="-L$POW_HOME/build -lrandomx"
         make -j$(nproc)
 
-    - name: Upload config.log
-      if: failure() # Only run this step if a previous step failed
-      uses: actions/upload-artifact@v2
-      with:
-        name: config.log
-        path: /home/runner/work/miner/miner/config.log
-
-    - name: Compress artifacts
-      run: |
-        tar -czvf ubuntu-${{ matrix.config.os }}.tar.gz ./minerd
-
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ubuntu-${{ matrix.config.os }}
-        path: ./ubuntu-${{ matrix.config.os }}.tar.gz
-
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
