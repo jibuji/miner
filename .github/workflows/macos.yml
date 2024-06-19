@@ -49,9 +49,8 @@ jobs:
         ./configure CPPFLAGS=" -I$POW_HOME/src " LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
         make -j$(sysctl -n hw.logicalcpu)
 
-    - name: Upload config.log
-      if: failure() # Only run this step if a previous step failed
-      uses: actions/upload-artifact@v2
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
       with:
-        name: config.log
-        path: ./config.log
+        name: macos-${{ matrix.config.os }}
+        path: ./minerd
