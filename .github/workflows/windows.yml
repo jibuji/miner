@@ -66,7 +66,7 @@ jobs:
           with:
             name: windows-msys2-${{ matrix.config.c }}
             path: |
-                ./minerd*
+                ./minerd.exe
                 /mingw64/bin/libiconv-2.dll
                 /mingw64/bin/tcl86.dll
                 /mingw64/bin/libbrotlicommon.dll
@@ -75,3 +75,14 @@ jobs:
                 /mingw64/bin/tk86.dll
                 /mingw64/bin/libbrotlidec.dll
                 /mingw64/bin/libintl-8.dll
+                /mingw64/bin/libssl-3-x64.dll
+                /mingw64/bin/libbrotlienc.dll
+                /mingw64/bin/libstdc++-6.dll
+                /mingw64/bin/zlib1.dll
+                /mingw64/bin/libcrypto-3-x64.dll
+                /mingw64/bin/libunistring-5.dll
+                /mingw64/bin/libcurl-4.dll
+                /mingw64/bin/libnghttp2-14.dll
+                /mingw64/bin/libwinpthread-1.dll
+                /mingw64/bin/libgcc_s_seh-1.dll
+                /mingw64/bin/libpsl-5.dll
