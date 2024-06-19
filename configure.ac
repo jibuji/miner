@@ -2,7 +2,10 @@ AC_INIT([cpuminer], [2.5.1])
 # Check if we're cross-compiling for the NDK
 if test "$CROSS_COMPILE_FOR_NDK" = "yes"; then
     # Set the path to your NDK
-    NDK=/home/buji/Android/Sdk/ndk/27.0.11902837
+    #NDK=/home/buji/Android/Sdk/ndk/27.0.11902837
+    if test -z "$NDK"; then
+        AC_MSG_ERROR([NDK environment variable is not set])
+    fi
 
     # Set the target architecture
     ARCH=aarch64
