@@ -35,9 +35,8 @@ jobs:
     
         - name: Build Miner
           run: |
-            ls /mingw64/bin
+            ls /mingw64/bin/*.dll
             find /mingw64 -name 'libiconv-2.dll'
-            find /mingw64 -name 'edit.dll'
             exit 1;
             # install pow
             MINER_SRC_DIR=$(pwd)
