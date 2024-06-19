@@ -5,9 +5,9 @@ else
 JANSSON_INCLUDES=
 endif
 
-CCLD = g++
+CCLD=@CCLD@
 
-CFLAGS = -g -fpermissive -O0
+CFLAGS = -g -fpermissive -O0 -fPIC
 
 EXTRA_DIST	= example-cfg.json nomacro.pl
 

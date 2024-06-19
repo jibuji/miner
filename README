@@ -30,3 +30,24 @@ If no protocol is specified, the proxy is assumed to be a HTTP proxy.
 When the --proxy option is not used, the program honors the http_proxy
 and all_proxy environment variables.
 
+```bash
+cd depends/curl
+
+export NDK_PATH=/home/buji/Android/Sdk/ndk/27.0.11902837               
+export API_LEVEL=28                                            
+export TOOLCHAIN=$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64
+export TARGET=aarch64-linux-android
+export AR=$TOOLCHAIN/bin/llvm-ar
+export AS=$TOOLCHAIN/bin/llvm-as
+export CC=$TOOLCHAIN/bin/$TARGET$API_LEVEL-clang
+export CXX=$TOOLCHAIN/bin/$TARGET$API_LEVEL-clang++
+export LD=$TOOLCHAIN/bin/ld
+export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+export STRIP=$TOOLCHAIN/bin/llvm-strip
+
+./configure --host=$TARGET --without-ssl --disable-shared --enable-static
+make
+
+cd ../../
+./autogen.sh
+```

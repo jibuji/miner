@@ -1,0 +1,91 @@
+name: build-windows
+
+on:
+  push:
+    branches: [ "wcicd-test" ]
+  pull_request:
+
+jobs:
+    build-windows-msys2:
+
+        timeout-minutes: 15
+        runs-on: windows-latest
+    
+        strategy:
+          matrix:
+            config:
+              - {c: "gcc", cxx: "g++", pow_version: 0.2.2}
+              # - {c: "clang", cxx: "clang++"}
+    
+        defaults:
+          run:
+            shell: msys2 {0}
+    
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            submodules: recursive
+    
+        - name: Setup MSYS2
+          uses: eine/setup-msys2@v2
+          with:
+            update: true
+            install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-lld mingw-w64-x86_64-cmake make automake autoconf unzip
+    
+        - name: Build Miner
+          run: |
+            ls /mingw64/bin/*.dll
+            # install pow
+            MINER_SRC_DIR=$(pwd)
+            POW_VERSION=${{ matrix.config.pow_version }}
+            curl -sL https://codeload.github.com/bitbi-core/pow/zip/refs/tags/v${POW_VERSION} -o pow.zip
+            POW_HOME=$HOME/pow
+            mkdir -p $POW_HOME
+            unzip pow.zip -d $POW_HOME
+            cd $POW_HOME/pow-${POW_VERSION}
+            mkdir build
+            cd build
+            cmake .. -G "Unix Makefiles" -DCMAKE_C_COMPILER=${{ matrix.config.c }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}
+            make -j$(nproc)
+
+            cd $MINER_SRC_DIR
+            ./autogen.sh
+            ./configure CPPFLAGS=" -I$POW_HOME/pow-${POW_VERSION}/src" LIBS="-L$POW_HOME/pow-${POW_VERSION}/build -lrandomx"
+            make
+            mkdir dlls
+            cp /mingw64/bin/*.dll dlls/
+
+        - name: Upload config.log
+          if: failure() # Only run this step if a previous step failed
+          uses: actions/upload-artifact@v2
+          with:
+            name: config.log
+            path: ./config.log
+
+        - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: windows-msys2-${{ matrix.config.c }}
+            path: |
+                ./dlls/libiconv-2.dll
+                ./dlls/tcl86.dll
+                ./dlls/libbrotlicommon.dll
+                ./dlls/libidn2-0.dll
+                ./dlls/libssh2-1.dll
+                ./dlls/tk86.dll
+                ./dlls/libbrotlidec.dll
+                ./dlls/libintl-8.dll
+                ./dlls/libssl-3-x64.dll
+                ./dlls/libbrotlienc.dll
+                ./dlls/libstdc++-6.dll
+                ./dlls/zlib1.dll
+                ./dlls/libcrypto-3-x64.dll
+                ./dlls/libunistring-5.dll
+                ./dlls/libcurl-4.dll
+                ./dlls/libnghttp2-14.dll
+                ./dlls/libwinpthread-1.dll
+                ./dlls/libgcc_s_seh-1.dll
+                ./dlls/libpsl-5.dll
+                ./dlls/libzstd.dll
+                ./minerd.exe
