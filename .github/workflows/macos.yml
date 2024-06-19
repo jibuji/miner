@@ -31,9 +31,10 @@ jobs:
         make -j$(sysctl -n hw.logicalcpu)
         ls $POW_HOME/pow-${{matrix.config.pow_version}}/build
         CURL_HOME=$HOME/curl
+        mkdir -p $CURL_HOME
         curl -sL https://curl.haxx.se/download/curl-7.64.1.tar.gz -o curl.tar.gz
-        tar -xvf curl.tar.gz -C curl
-        cd curl
+        tar -xvf curl.tar.gz -C $CURL_HOME
+        cd $CURL_HOME
         mkdir build
         cd build
         cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCURL_ENABLE_SSL=OFF ..
