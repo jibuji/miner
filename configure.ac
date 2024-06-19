@@ -2,9 +2,9 @@ AC_INIT([cpuminer], [2.5.1])
 # Check if we're cross-compiling for the NDK
 if test "$CROSS_COMPILE_FOR_NDK" = "yes"; then
     # Set the path to your NDK
-    #NDK=/home/buji/Android/Sdk/ndk/27.0.11902837
-    if test -z "$NDK"; then
-        AC_MSG_ERROR([NDK environment variable is not set])
+    #NDK_HOME=/home/buji/Android/Sdk/ndk/27.0.11902837
+    if test -z "$NDK_HOME"; then
+        AC_MSG_ERROR([NDK_HOME environment variable is not set])
     fi
 
     # Set the target architecture
@@ -14,7 +14,7 @@ if test "$CROSS_COMPILE_FOR_NDK" = "yes"; then
     API=23
 
     # Set the toolchain and sysroot
-    TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64
+    TOOLCHAIN=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64
     SYSROOT=$TOOLCHAIN/sysroot
 
     # Set the cross-compile prefix
