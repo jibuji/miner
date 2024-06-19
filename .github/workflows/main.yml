@@ -1,0 +1,308 @@
+name: Bitbi Miner CI
+
+on:
+  push:
+    # tags: [ "v*.*.*-test" ]
+    # branches: ["integrate"]
+  pull_request:
+
+jobs:
+    build-ubuntu:
+
+        timeout-minutes: 5
+        runs-on: ${{ matrix.config.os }}
+    
+        strategy:
+          matrix:
+            config:
+              - {os: ubuntu-22.04, c: gcc-12, cpp: g++-12, pow_version: 0.2.2}
+    
+        steps:
+        - name: Install dependencies
+          run: |
+            sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            sudo apt update
+            sudo apt install -y libcurl4-openssl-dev git build-essential cmake ${{ matrix.config.c }} ${{ matrix.config.cpp }}
+            curl -sL https://codeload.github.com/bitbi-core/pow/zip/refs/tags/v${{matrix.config.pow_version}} -o pow.zip
+            POW_HOME=$HOME/pow
+            mkdir -p $POW_HOME
+            unzip pow.zip -d $POW_HOME
+            cd $POW_HOME/pow-${{matrix.config.pow_version}}
+            mkdir build
+            cd build
+            cmake ..
+            make -j$(nproc)
+            ls $POW_HOME/pow-${{matrix.config.pow_version}}/build
+    
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            submodules: true
+    
+        - name: Build Miner
+          run: |
+            ./autogen.sh
+            ./nomacro.pl
+            POW_HOME=$HOME/pow/pow-${{matrix.config.pow_version}}
+            ls $POW_HOME
+            ls $POW_HOME/build
+            ./configure CPPFLAGS=" -I$POW_HOME/src" LIBS="-L$POW_HOME/build -lrandomx"
+            make -j$(nproc)
+            mv ./minerd ./minerd-ubuntu-${{ matrix.config.os }}
+    
+        - name: Upload config.log
+          if: failure() # Only run this step if a previous step failed
+          uses: actions/upload-artifact@v2
+          with:
+            name: config.log
+            path: ./config.log
+        
+        - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: ubuntu-${{ matrix.config.os }}
+            path: ./minerd-ubuntu-${{ matrix.config.os }}
+
+
+    build-windows-msys2:
+
+        timeout-minutes: 15
+        runs-on: windows-latest
+    
+        strategy:
+          matrix:
+            config:
+              - {c: "gcc", cxx: "g++", pow_version: 0.2.2}
+              # - {c: "clang", cxx: "clang++"}
+    
+        defaults:
+          run:
+            shell: msys2 {0}
+    
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            submodules: recursive
+    
+        - name: Setup MSYS2
+          uses: eine/setup-msys2@v2
+          with:
+            update: true
+            install: mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang mingw-w64-x86_64-lld mingw-w64-x86_64-cmake make automake autoconf unzip
+    
+        - name: Build Miner
+          run: |
+            # install pow
+            MINER_SRC_DIR=$(pwd)
+            POW_VERSION=${{ matrix.config.pow_version }}
+            curl -sL https://codeload.github.com/bitbi-core/pow/zip/refs/tags/v${POW_VERSION} -o pow.zip
+            POW_HOME=$HOME/pow
+            mkdir -p $POW_HOME
+            unzip pow.zip -d $POW_HOME
+            cd $POW_HOME/pow-${POW_VERSION}
+            mkdir build
+            cd build
+            cmake .. -G "Unix Makefiles" -DCMAKE_C_COMPILER=${{ matrix.config.c }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}
+            make -j$(nproc)
+
+            cd $MINER_SRC_DIR
+            ./autogen.sh
+            ./configure CPPFLAGS=" -I$POW_HOME/pow-${POW_VERSION}/src" LIBS="-L$POW_HOME/pow-${POW_VERSION}/build -lrandomx"
+            make
+            mkdir -p build
+            cp /mingw64/bin/*.dll build/
+            cp minerd.exe build/
+
+
+        - name: Upload config.log
+          if: failure() # Only run this step if a previous step failed
+          uses: actions/upload-artifact@v2
+          with:
+            name: config.log
+            path: ./config.log
+
+        - name: Compress artifacts
+          run: |
+            tar -czvf windows-msys2-${{ matrix.config.c }}.tar.gz minerd.exe -C build/ .
+
+        - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: windows-msys2-${{ matrix.config.c }}
+            path: windows-msys2-${{ matrix.config.c }}.tar.gz
+                
+
+    build-macos:
+
+        timeout-minutes: 5
+        runs-on: ${{ matrix.config.os }}
+    
+        strategy:
+          matrix:
+            config:
+                - {os: macos-13, pow_version: 0.2.2}
+    
+        steps:
+        - name: Install dependencies
+          run: |
+            brew install curl git cmake automake autoconf libtool pkg-config
+            curl -sL https://codeload.github.com/bitbi-core/pow/zip/refs/tags/v${{matrix.config.pow_version}} -o pow.zip
+            POW_HOME=$HOME/pow
+            mkdir -p $POW_HOME
+            unzip pow.zip -d $POW_HOME
+            cd $POW_HOME/pow-${{matrix.config.pow_version}}
+            mkdir build
+            cd build
+            cmake ..
+            make -j$(sysctl -n hw.logicalcpu)
+            ls $POW_HOME/pow-${{matrix.config.pow_version}}/build
+    
+    
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            submodules: true
+    
+        - name: Build Miner
+          run: |
+            export ACLOCAL_PATH="$(pwd)/m4:$ACLOCAL_PATH"
+            echo $ACLOCAL_PATH
+            ./autogen.sh
+            ./nomacro.pl
+            POW_HOME=$HOME/pow/pow-${{matrix.config.pow_version}}
+            ls $POW_HOME
+            ls $POW_HOME/build
+            ./configure CPPFLAGS=" -I$POW_HOME/src " LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
+            make -j$(sysctl -n hw.logicalcpu)
+            mv ./minerd ./minerd-macos-${{ matrix.config.os }}
+    
+        - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: macos-${{ matrix.config.os }}
+            path: ./minerd-macos-${{ matrix.config.os }}
+
+    build-android:
+
+        timeout-minutes: 5
+        runs-on: ubuntu-22.04
+
+        strategy:
+          matrix:
+            config:
+            - {api_level: 23, ndk_version: 24.0.8215888, abi: arm64-v8a, pow_version: 0.2.2}
+
+        steps:
+        - name: Install dependencies
+          run: |
+            sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            sudo apt update
+            sudo apt install -y git build-essential cmake unzip openjdk-17-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+            ANDROID_TOOLS_PATH=${HOME}/sdk-sources/android-tools.zip
+            mkdir -p ${HOME}/sdk-sources
+            ANDROID_TOOLS_URL=https://googledownloads.cn/android/repository/commandlinetools-linux-11076708_latest.zip
+            curl --location --fail "${ANDROID_TOOLS_URL}" -o "$ANDROID_TOOLS_PATH"
+            ANDROID_HOME="${HOME}/SDKs/android"
+            mkdir -p "$ANDROID_HOME"
+            unzip -o "$ANDROID_TOOLS_PATH" -d "$ANDROID_HOME"
+            ANDROID_BUILD_TOOLS_VERSION=28.0.3
+            ANDROID_API_LEVEL=${{ matrix.config.api_level }}
+            ANDROID_NDK_VERSION=${{ matrix.config.ndk_version }}
+            JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+            yes | "${ANDROID_HOME}"/cmdline-tools/bin/sdkmanager --sdk_root="${ANDROID_HOME}" --install "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platform-tools" "platforms;android-${ANDROID_API_LEVEL}" "ndk;${ANDROID_NDK_VERSION}"
+            ls -l "${ANDROID_HOME}"
+
+        - name: build libs
+          run: |
+            ANDROID_API_LEVEL=${{ matrix.config.api_level }}
+            ANDROID_NDK_VERSION=${{ matrix.config.ndk_version }}
+            ANDROID_ABI=${{ matrix.config.abi }}
+            POW_VERSION=${{ matrix.config.pow_version }}
+            curl -sL https://codeload.github.com/bitbi-core/pow/zip/refs/tags/v${POW_VERSION} -o pow.zip
+            POW_HOME=$HOME/pow
+            mkdir -p $POW_HOME
+            unzip pow.zip -d $POW_HOME
+            cd $POW_HOME/pow-${POW_VERSION}
+            mkdir build
+            cd build
+            export ANDROID_NDK_HOME="${HOME}/SDKs/android/ndk/${ANDROID_NDK_VERSION}"
+            cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake  -DANDROID_ABI=$ANDROID_ABI -DANDROID_PLATFORM=android-$ANDROID_API_LEVEL ..
+            make -j$(nproc)
+            ls $POW_HOME/pow-${POW_VERSION}/build
+
+            echo "-----------------building curl-----------------"
+            curl -sL https://curl.se/download/curl-8.8.0.tar.gz -o curl-8.8.0.tar.gz
+            tar -xvf curl-8.8.0.tar.gz
+            CURL_HOME=$HOME/curl
+            mv curl-8.8.0 $CURL_HOME
+            cd $CURL_HOME
+            mkdir build
+            cd build
+            echo "pwd: $(pwd)"
+            echo "ANDROID_NDK_HOME: $ANDROID_NDK_HOME"
+            ls $ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
+            cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake -DANDROID_NDK=$ANDROID_NDK_HOME -DANDROID_ABI=$ANDROID_ABI -DANDROID_PLATFORM=android-$ANDROID_API_LEVEL -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCURL_ENABLE_SSL=OFF ..
+            make -j$(nproc) 
+            
+
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            submodules: true
+
+        - name: Build Miner
+          run: |
+            export CROSS_COMPILE_FOR_NDK=yes
+            ANDROID_NDK_VERSION=${{ matrix.config.ndk_version }}
+            POW_VERSION=${{ matrix.config.pow_version }}
+            export NDK_HOME="${HOME}/SDKs/android/ndk/${ANDROID_NDK_VERSION}"
+            export ACLOCAL_PATH="$(pwd)/m4:$ACLOCAL_PATH"
+            ./autogen.sh
+            POW_HOME=$HOME/pow/pow-$POW_VERSION
+            CURL_HOME=$HOME/curl
+            ls -l $POW_HOME/build
+            ls -l $CURL_HOME/build/lib
+            # ls -R $NDK_HOME/toolchains/llvm/prebuilt/
+            ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx -lz -L$CURL_HOME/build/lib -lcurl" --host=arm64-linux-androideab --disable-assembly
+            make -j$(nproc)
+            mv ./minerd ./minerd-android-${{ matrix.config.abi }}
+
+        - name: Upload config.log
+          if: failure() # Only run this step if a previous step failed
+          uses: actions/upload-artifact@v2
+          with:
+            name: config.log
+            path: ./config.log
+
+        - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: android-${{ matrix.config.abi }}
+            path: ./minerd-android-${{ matrix.config.abi }}
+
+    create-release:
+        needs: [build-ubuntu, build-windows-msys2, build-macos, build-android]
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Download all artifacts
+          uses: actions/download-artifact@v4
+            
+        - name: Display structure of downloaded files
+          run: ls -R
+
+        - name: Upload Release Assets
+          uses: softprops/action-gh-release@v2
+          with:
+            files: |
+                ubuntu-*/*
+                windows-msys2-*/*
+                macos-*/*
+                android-*/*
+
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
