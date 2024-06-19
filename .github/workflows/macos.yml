@@ -30,8 +30,16 @@ jobs:
         cmake ..
         make -j$(sysctl -n hw.logicalcpu)
         ls $POW_HOME/pow-${{matrix.config.pow_version}}/build
-        mkdir -p /usr/local/share/aclocal
-        curl -o /usr/local/share/aclocal/curl.m4 https://raw.githubusercontent.com/curl/curl/master/acinclude.m4
+        CURL_HOME=$HOME/curl
+        curl -sL https://curl.haxx.se/download/curl-7.64.1.tar.gz -o curl.tar.gz
+        tar -xvf curl.tar.gz -C curl
+        cd curl
+        mkdir build
+        cd build
+        cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCURL_ENABLE_SSL=OFF ..
+        make -j$(sysctl -n hw.logicalcpu)
+        echo $(pwd)
+        export ACLOCAL_PATH="/usr/local/share/aclocal:$ACLOCAL_PATH"./depends/curl/docs/libcurl/libcurl.m4
 
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -40,15 +48,17 @@ jobs:
 
     - name: Build Miner
       run: |
-        find /usr/local -name curl.m4
-        export ACLOCAL_PATH="/usr/local/share/aclocal:$ACLOCAL_PATH"
-        ls -R /usr/local/share/aclocal
+        CURL_HOME=$HOME/curl
+        ls $CURL_HOME/docs/libcurl
+        export ACLOCAL_PATH="$CURL_HOME/docs/libcurl:$ACLOCAL_PATH"
         ./autogen.sh
         ./nomacro.pl
         POW_HOME=$HOME/pow/pow-${{matrix.config.pow_version}}
         ls $POW_HOME
         ls $POW_HOME/build
-        ./configure CPPFLAGS=" -I$POW_HOME/src" LIBS="-L$POW_HOME/build -lrandomx"
+        ls $CURL_HOME
+        ls $CURL_HOME/build
+        ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx -L$CURL_HOME/build/lib -lcurl"
         make -j$(sysctl -n hw.logicalcpu)
 
     - name: Upload config.log

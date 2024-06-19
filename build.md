@@ -65,6 +65,7 @@ unzip android-ndk-r26d-linux-x86_64.zip
 export ANDROID_NDK_HOME=/path-to-android-ndk-r26d
 # in current project
 mkdir depends
+cd depends
 # download latest curl and build using android ndk
 wget https://curl.haxx.se/download/curl-7.64.1.tar.gz
 tar -xvf curl-7.64.1.tar.gz
