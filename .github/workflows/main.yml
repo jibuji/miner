@@ -2,7 +2,8 @@ name: Bitbi Miner CI
 
 on:
   push:
-    tags: [ "v*.*.*" ]
+    # tags: [ "v*.*.*" ]
+    branches: ["integrate"]
   pull_request:
 
 jobs:
@@ -47,6 +48,7 @@ jobs:
             ls $POW_HOME/build
             ./configure CPPFLAGS=" -I$POW_HOME/src" LIBS="-L$POW_HOME/build -lrandomx"
             make -j$(nproc)
+            mv ./minerd ./minerd-ubuntu-${{ matrix.config.os }}
     
         - name: Upload config.log
           if: failure() # Only run this step if a previous step failed
@@ -54,12 +56,12 @@ jobs:
           with:
             name: config.log
             path: ./config.log
-            
+        
         - name: Upload artifact
           uses: actions/upload-artifact@v4
           with:
             name: ubuntu-${{ matrix.config.os }}
-            path: ./minerd
+            path: ./minerd-ubuntu-${{ matrix.config.os }}
 
 
     build-windows-msys2:
@@ -119,32 +121,16 @@ jobs:
             name: config.log
             path: ./config.log
 
+        - name: Compress artifacts
+          run: |
+            tar -czvf windows-msys2-${{ matrix.config.c }}.tar.gz -C ./build minerd.exe dlls/
+
         - name: Upload artifact
           uses: actions/upload-artifact@v4
           with:
             name: windows-msys2-${{ matrix.config.c }}
-            path: |
-                ./dlls/libiconv-2.dll
-                ./dlls/tcl86.dll
-                ./dlls/libbrotlicommon.dll
-                ./dlls/libidn2-0.dll
-                ./dlls/libssh2-1.dll
-                ./dlls/tk86.dll
-                ./dlls/libbrotlidec.dll
-                ./dlls/libintl-8.dll
-                ./dlls/libssl-3-x64.dll
-                ./dlls/libbrotlienc.dll
-                ./dlls/libstdc++-6.dll
-                ./dlls/zlib1.dll
-                ./dlls/libcrypto-3-x64.dll
-                ./dlls/libunistring-5.dll
-                ./dlls/libcurl-4.dll
-                ./dlls/libnghttp2-14.dll
-                ./dlls/libwinpthread-1.dll
-                ./dlls/libgcc_s_seh-1.dll
-                ./dlls/libpsl-5.dll
-                ./dlls/libzstd.dll
-                ./minerd.exe
+            path: windows-msys2-${{ matrix.config.c }}.tar.gz
+                
 
     build-macos:
 
@@ -188,12 +174,13 @@ jobs:
             ls $POW_HOME/build
             ./configure CPPFLAGS=" -I$POW_HOME/src " LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
             make -j$(sysctl -n hw.logicalcpu)
+            mv ./minerd ./minerd-macos-${{ matrix.config.os }}
     
         - name: Upload artifact
           uses: actions/upload-artifact@v4
           with:
             name: macos-${{ matrix.config.os }}
-            path: ./minerd
+            path: ./minerd-macos-${{ matrix.config.os }}
 
     build-android:
 
@@ -279,6 +266,7 @@ jobs:
             # ls -R $NDK_HOME/toolchains/llvm/prebuilt/
             ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx -lz -L$CURL_HOME/build/lib -lcurl" --host=arm64-linux-androideab --disable-assembly
             make -j$(nproc)
+            mv ./minerd ./minerd-android-${{ matrix.config.abi }}
 
         - name: Upload config.log
           if: failure() # Only run this step if a previous step failed
@@ -291,7 +279,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: android-${{ matrix.config.abi }}
-            path: ./minerd 
+            path: ./minerd-android-${{ matrix.config.abi }}
 
     create-release:
         needs: [build-ubuntu, build-windows-msys2, build-macos, build-android]
@@ -311,7 +299,7 @@ jobs:
           with:
             files: |
                 ubuntu-*/*
-                windows-msys2-*/**
+                windows-msys2-*/*
                 macos-*/*
                 android-*/*
 
