@@ -108,6 +108,7 @@ jobs:
             ./autogen.sh
             ./configure CPPFLAGS=" -I$POW_HOME/pow-${POW_VERSION}/src" LIBS="-L$POW_HOME/pow-${POW_VERSION}/build -lrandomx"
             make
+            mkdir -p dlls
             cp /mingw64/bin/*.dll dlls/
 
 
