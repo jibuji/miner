@@ -81,5 +81,15 @@ jobs:
         ./autogen.sh
         POW_HOME=$HOME/pow/pow-0.2.2
         CURL_HOME=$HOME/curl
+        ls -l $POW_HOME/build
+        ls -l $CURL_HOME/build/lib
         ./configure CPPFLAGS=" -I$POW_HOME/src -I$CURL_HOME/include" LIBS="-L$POW_HOME/build -lrandomx -lz -L$CURL_HOME/build/lib -lcurl" --host=arm64-linux-androideab --disable-assembly
         make -j$(nproc)
+
+    - name: Upload config.log
+      if: failure() # Only run this step if a previous step failed
+      uses: actions/upload-artifact@v2
+      with:
+        name: config.log
+        path: ./config.log
+          
