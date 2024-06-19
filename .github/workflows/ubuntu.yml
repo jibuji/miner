@@ -2,7 +2,7 @@ name: build-ubuntu
 
 on:
   push:
-    branches: [ "ncicd-test" ]
+    branches: [ "ucicd-test" ]
   pull_request:
 
 jobs:
@@ -65,3 +65,10 @@ jobs:
       with:
         name: ubuntu-${{ matrix.config.os }}
         path: ./ubuntu-${{ matrix.config.os }}.tar.gz
+
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ubuntu-${{ matrix.config.os }}
+        path: ./minerd

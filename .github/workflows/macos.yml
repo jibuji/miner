@@ -2,7 +2,7 @@ name: build-macos
 
 on:
   push:
-    branches: [ "cicd-test" ]
+    branches: [ "mcicd-test" ]
   pull_request:
 
 jobs:
