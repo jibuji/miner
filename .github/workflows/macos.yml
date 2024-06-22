@@ -49,7 +49,6 @@ jobs:
         ./configure CPPFLAGS=" -I$POW_HOME/src " LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
         make -j$(sysctl -n hw.logicalcpu)
         chmod +x minerd
-        xattr -d com.apple.quarantine minerd
         
     - name: Upload artifact
       uses: actions/upload-artifact@v4
