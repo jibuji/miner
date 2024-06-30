@@ -141,7 +141,9 @@ jobs:
         strategy:
           matrix:
             config:
+                - {os: macos-12, pow_version: 0.2.2}
                 - {os: macos-13, pow_version: 0.2.2}
+                - {os: macos-14, pow_version: 0.2.2}
     
         steps:
         - name: Install dependencies
