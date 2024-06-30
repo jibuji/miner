@@ -106,13 +106,11 @@ struct workio_cmd
 
 enum algos
 {
-	ALGO_SCRYPT,  /* scrypt(1024,1,1) */
 	ALGO_SHA256D, /* SHA-256d */
 	ALGO_RandomX, /* RandomX */
 };
 
 static const char *algo_names[] = {
-	[ALGO_SCRYPT] = "scrypt",
 	[ALGO_SHA256D] = "sha256d",
 	[ALGO_RandomX] = "randomx",
 };
@@ -134,8 +132,7 @@ static int opt_retries = -1;
 static int opt_fail_pause = 30;
 int opt_timeout = 0;
 static int opt_scantime = 5;
-static enum algos opt_algo = ALGO_SCRYPT;
-static int opt_scrypt_n = 1024;
+static enum algos opt_algo = ALGO_RandomX;
 static int opt_n_threads;
 static int num_processors;
 static char *rpc_url;
@@ -178,8 +175,7 @@ static char const usage[] = "\
 Usage: " PROGRAM_NAME " [OPTIONS]\n\
 Options:\n\
   -a, --algo=ALGO       specify the algorithm to use\n\
-                          scrypt    scrypt(1024, 1, 1) (default)\n\
-                          scrypt:N  scrypt(N, 1, 1)\n\
+						  randomx   RandomX\n\
                           sha256d   SHA-256d\n\
   -o, --url=URL         URL of mining server\n\
   -O, --userpass=U:P    username:password pair for mining server\n\
@@ -1231,10 +1227,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 		free(xnonce2str);
 	}
 
-	if (opt_algo == ALGO_SCRYPT)
-		diff_to_target(work->target, sctx->job.diff / 65536.0);
-	else
-		diff_to_target(work->target, sctx->job.diff);
+	diff_to_target(work->target, sctx->job.diff);
 }
 
 static void *miner_thread(void *userdata)
@@ -1695,16 +1688,6 @@ static void parse_arg(int key, char *arg, char *pname)
 				if (arg[v] == '\0')
 				{
 					opt_algo = i;
-					break;
-				}
-				if (arg[v] == ':' && i == ALGO_SCRYPT)
-				{
-					char *ep;
-					v = strtol(arg + v + 1, &ep, 10);
-					if (*ep || v & (v - 1) || v < 2)
-						continue;
-					opt_algo = i;
-					opt_scrypt_n = v;
 					break;
 				}
 			}
