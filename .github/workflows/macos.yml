@@ -47,6 +47,8 @@ jobs:
         POW_HOME=$HOME/pow/pow-${{matrix.config.pow_version}}
         ls $POW_HOME
         ls $POW_HOME/build
+        export CFLAGS="-target arm64-apple-macos11" # Specify target architecture for arm64
+        export CXXFLAGS="$CFLAGS"
         ./configure CPPFLAGS=" -I$POW_HOME/src " LIBS="-L$POW_HOME/build -lrandomx  -lcurl"
         make -j$(sysctl -n hw.logicalcpu)
         chmod +x minerd
