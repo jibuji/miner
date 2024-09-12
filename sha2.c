@@ -810,7 +810,7 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
         return 0;
     }
     uint32_t datasetItemCount = randomx_dataset_item_count();
-    const int initThreadCount = 2;
+    const int initThreadCount = opt_init_threads;
     pthread_t* init_threads = malloc(sizeof(pthread_t) * initThreadCount);
     dataset_init_thread_args* init_thread_args = malloc(sizeof(dataset_init_thread_args) * initThreadCount);
 
@@ -839,7 +839,7 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
     randomx_release_cache(cache);
 
     // Create VMs for mining threads
-    const int miningThreadCount = 4;
+    const int miningThreadCount = opt_mining_threads;
     randomx_vm **vms = malloc(sizeof(randomx_vm*) * miningThreadCount);
     for (int i = 0; i < miningThreadCount; ++i) {
         vms[i] = randomx_create_vm(flags, NULL, dataset);

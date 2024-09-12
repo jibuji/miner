@@ -131,6 +131,8 @@ static bool opt_quiet = false;
 static int opt_retries = -1;
 static int opt_fail_pause = 30;
 int opt_timeout = 0;
+int opt_init_threads = 1;  // Default value
+int opt_mining_threads = 2;  // Default value
 static int opt_scantime = 5;
 static enum algos opt_algo = ALGO_RandomX;
 static int opt_n_threads;
@@ -210,6 +212,8 @@ Options:\n\
 #endif
 							"\
       --benchmark       run in offline benchmark mode\n\
+      --init-threads=N     Set the number of RandomX initialization threads (default: 2)\n\
+      --mining-threads=N   Set the number of RandomX mining threads (default: 4)\n\
   -c, --config=FILE     load a JSON-format configuration file\n\
   -V, --version         display version information and exit\n\
   -h, --help            display this help text and exit\n\
@@ -257,6 +261,8 @@ static struct option const options[] = {
 	{"user", 1, NULL, 'u'},
 	{"userpass", 1, NULL, 'O'},
 	{"version", 0, NULL, 'V'},
+	{"init-threads", required_argument, NULL, 1016},
+    {"mining-threads", required_argument, NULL, 1017},
 	{0, 0, 0, 0}};
 
 struct work
@@ -1918,6 +1924,12 @@ static void parse_arg(int key, char *arg, char *pname)
 		show_version_and_exit();
 	case 'h':
 		show_usage_and_exit(0);
+	case 1016:
+		opt_init_threads = atoi(arg);
+		break;
+	case 1017:
+		opt_mining_threads = atoi(arg);
+		break;
 	default:
 		show_usage_and_exit(1);
 	}
