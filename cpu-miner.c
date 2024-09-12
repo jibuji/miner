@@ -39,7 +39,7 @@
 #include "miner.h"
 
 #define PROGRAM_NAME "minerd"
-#define LP_SCANTIME 60
+#define LP_SCANTIME 31
 
 #ifdef __linux /* Linux specific policy and affinity management */
 #include <sched.h>
@@ -1299,31 +1299,38 @@ static void *miner_thread(void *userdata)
 			work_copy(&work, &g_work);
 			work.data[19] = 0xffffffffU / opt_n_threads * thr_id;
 		}
-		else
+		else {
+			work.data[19] = hashes_done;
 			work.data[19]++;
+		}
 		pthread_mutex_unlock(&g_work_lock);
 		work_restart[thr_id].restart = 0;
 
+		
 		/* adjust max_nonce to meet target scan time */
-
+		
 		max64 = g_work_time + (have_longpoll ? LP_SCANTIME : opt_scantime) - time(NULL);
+		applog(LOG_INFO, "max64 before multiply: %lu, thr_hashrates[thr_id]: %f, work.data[17]: %u", max64, thr_hashrates[thr_id], work.data[17]);
 		max64 *= thr_hashrates[thr_id];
 		if (max64 <= 0)
 		{
-			max64 = 0x1fffff;
+			max64 = 60*10000;
 		}
 		if (work.data[19] + max64 > end_nonce)
 			max_nonce = end_nonce;
 		else
 			max_nonce = work.data[19] + max64;
 
+		
+
 		hashes_done = 0;
 		gettimeofday(&tv_start, NULL);
+
+		applog(LOG_INFO, "max_nonce: %u, start_nonce: %u, end_nonce: %u", max_nonce, work.data[19], end_nonce);
 
 		/* scan nonces for a proof-of-work hash */
 		rc = scanhash_randomx(thr_id, work.data, work.target,
 							  max_nonce, &hashes_done);
-
 		/* record scanhash elapsed time */
 		gettimeofday(&tv_end, NULL);
 		timeval_subtract(&diff, &tv_end, &tv_start);
@@ -1332,6 +1339,11 @@ static void *miner_thread(void *userdata)
 			pthread_mutex_lock(&stats_lock);
 			thr_hashrates[thr_id] =
 				hashes_done / (double)(diff.tv_sec + 1e-6 * diff.tv_usec);
+			// if hashrate is too large than 100000, then set it to 100000
+			if (thr_hashrates[thr_id] > 20000)
+			{
+				thr_hashrates[thr_id] = 20000;
+			}
 			pthread_mutex_unlock(&stats_lock);
 		}
 		if (!opt_quiet)
