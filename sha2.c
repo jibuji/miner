@@ -17,7 +17,8 @@
 #include "sha256.h"
 #include <pthread.h>
 #include <sched.h>
-
+#include <unistd.h>
+#include <sys/sysinfo.h>
 #ifdef __x86_64__
 #include <cpuid.h>
 #endif
@@ -91,16 +92,33 @@ void sha256d(unsigned char *hash, const unsigned char *data, int len)
 }
 
 
+// Add this function to get the number of CPU cores
+static int get_cpu_count() {
+    static int cpuCores = -1;
+    if (cpuCores == -1) {
+        long nprocs = sysconf(_SC_NPROCESSORS_ONLN);
+        if (nprocs < 1) {
+            applog(LOG_WARNING, "Failed to determine number of CPUs online, defaulting to 1");
+            cpuCores = 1;
+        } else {
+            cpuCores = (int)nprocs;
+        }
+        applog(LOG_INFO, "cpuCores: %d", cpuCores);
+    }
+    return cpuCores;
+}
+
 static inline void set_cpu_affinity(int cpu) {
+	cpu = cpu % get_cpu_count();
     cpu_set_t set;
     CPU_ZERO(&set);
     CPU_SET(cpu, &set);
 
     int result = sched_setaffinity(0, sizeof(set), &set);
     if (result == 0) {
-        applog(LOG_INFO, "Successfully set CPU affinity to CPU %d.\n", cpu);
+        // applog(LOG_INFO, "Successfully set CPU affinity to CPU %d.\n", cpu);
     } else {
-        applog(LOG_ERR, "Failed to set CPU affinity.\n");
+        applog(LOG_ERR, "Failed to set CPU %d affinity.\n", cpu);
     }
 }
 
@@ -113,9 +131,10 @@ typedef struct  {
 }dataset_init_thread_args;
 
 
+
 void randomx_init_dataset_thread(dataset_init_thread_args* args) {
     // Set CPU affinity
-    set_cpu_affinity(args->cpu_id % 20);
+    set_cpu_affinity(args->cpu_id);
     randomx_init_dataset(args->dataset, args->cache, args->startItem, args->itemCount);
 }
 
@@ -258,6 +277,47 @@ static unsigned long sum_hashes_done(unsigned long *thread_hashes, int count) {
     return total;
 }
 
+struct mining_thread_args {
+    randomx_vm *vm;
+    uint32_t *pdata;
+    const uint32_t *ptarget;
+    uint32_t start_nonce;
+    uint32_t end_nonce;
+    int *found;
+    uint32_t *result_nonce;
+    int cpu_id;
+    unsigned long *thread_hashes_done;
+    int thr_id;
+    volatile unsigned long *restart_flag;
+};
+
+void *mining_thread(void *arg) {
+    struct mining_thread_args *args = (struct mining_thread_args *)arg;
+    set_cpu_affinity(args->cpu_id);
+    uint32_t hash[8] __attribute__((aligned(32)));
+    uint32_t input[20];
+    memcpy(input, args->pdata, 80);
+
+    unsigned long hashes_done = 0;
+    for (uint32_t n = args->start_nonce; n < args->end_nonce && !(*args->found); ++n) {
+        if (*args->restart_flag) {
+            *args->thread_hashes_done = hashes_done;
+            return NULL;
+        }
+        input[19] = n;
+        randomx_calculate_hash(args->vm, input, 80, hash);
+        hashes_done++;
+        if (fulltest(hash, args->ptarget)) {
+            *args->found = 1;
+            *args->result_nonce = n;
+            *args->thread_hashes_done = hashes_done;
+            return NULL;
+        }
+    }
+    *args->thread_hashes_done = hashes_done;
+    return NULL;
+}
+
 int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
                      uint32_t max_nonce, unsigned long *hashes_done)
 {
@@ -299,48 +359,6 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
     timeval_subtract(&diff, &tv_end, &tv_start);
     applog(LOG_DEBUG, "randomx initializing in %d ms",
             diff.tv_sec * 1000 + diff.tv_usec / 1000);
-
-    // Mining thread function
-    struct mining_thread_args {
-        randomx_vm *vm;
-        uint32_t *pdata;
-        const uint32_t *ptarget;
-        uint32_t start_nonce;
-        uint32_t end_nonce;
-        int *found;
-        uint32_t *result_nonce;
-        int cpu_id;
-        unsigned long *thread_hashes_done;
-        int thr_id;
-        volatile unsigned long *restart_flag;
-    };
-
-    void *mining_thread(void *arg) {
-        struct mining_thread_args *args = (struct mining_thread_args *)arg;
-        set_cpu_affinity(args->cpu_id);
-        uint32_t hash[8] __attribute__((aligned(32)));
-        uint32_t input[20];
-        memcpy(input, args->pdata, 80);
-
-        unsigned long hashes_done = 0;
-        for (uint32_t n = args->start_nonce; n < args->end_nonce && !(*args->found); ++n) {
-            if (*args->restart_flag) {
-                *args->thread_hashes_done = hashes_done;
-                return NULL;
-            }
-            input[19] = n;
-            randomx_calculate_hash(args->vm, input, 80, hash);
-            hashes_done++;
-            if (fulltest(hash, args->ptarget)) {
-                *args->found = 1;
-                *args->result_nonce = n;
-                *args->thread_hashes_done = hashes_done;
-                return NULL;
-            }
-        }
-        *args->thread_hashes_done = hashes_done;
-        return NULL;
-    }
 
     // Start mining threads
     pthread_t *mining_threads = malloc(sizeof(pthread_t) * miningThreadCount);
