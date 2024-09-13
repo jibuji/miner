@@ -39,7 +39,7 @@
 #include "miner.h"
 
 #define PROGRAM_NAME "minerd"
-#define LP_SCANTIME 31
+#define LP_SCANTIME 200
 
 #ifdef __linux /* Linux specific policy and affinity management */
 #include <sched.h>
@@ -1228,7 +1228,7 @@ static void *miner_thread(void *userdata)
 		max64 *= thr_hashrates[thr_id];
 		if (max64 <= 0)
 		{
-			max64 = 60*10000;
+			max64 = 60*100000;
 		}
 		if (work.data[19] + max64 > end_nonce)
 			max_nonce = end_nonce;
@@ -1254,9 +1254,9 @@ static void *miner_thread(void *userdata)
 			thr_hashrates[thr_id] =
 				hashes_done / (double)(diff.tv_sec + 1e-6 * diff.tv_usec);
 			// if hashrate is too large than 100000, then set it to 100000
-			if (thr_hashrates[thr_id] > 20000)
+			if (thr_hashrates[thr_id] > 80000)
 			{
-				thr_hashrates[thr_id] = 20000;
+				thr_hashrates[thr_id] = 80000;
 			}
 			pthread_mutex_unlock(&stats_lock);
 		}

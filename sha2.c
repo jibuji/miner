@@ -928,22 +928,23 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
         uint32_t *result_nonce;
         int cpu_id;
         unsigned long *thread_hashes_done;
+        int thr_id;
+        volatile unsigned long *restart_flag;
     };
 
     void *mining_thread(void *arg) {
         struct mining_thread_args *args = (struct mining_thread_args *)arg;
         
-        // Set CPU affinity
-        // if (set_thread_affinity(args->cpu_id) != 0) {
-        //     applog(LOG_WARNING, "Failed to set thread affinity for mining thread on CPU %d", args->cpu_id);
-        // }
-
         uint32_t hash[8] __attribute__((aligned(32)));
         uint32_t input[20];
         memcpy(input, args->pdata, 80);
 
         unsigned long hashes_done = 0;
         for (uint32_t n = args->start_nonce; n < args->end_nonce && !(*args->found); ++n) {
+            if (*args->restart_flag) {
+                *args->thread_hashes_done = hashes_done;
+                return NULL;
+            }
             input[19] = n;
             randomx_calculate_hash(args->vm, input, 80, hash);
             hashes_done++;
@@ -990,6 +991,8 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
         thread_args[i].result_nonce = &result_nonce;
         thread_args[i].cpu_id = i + initThreadCount;  // Offset CPU IDs to avoid overlap with init threads
         thread_args[i].thread_hashes_done = &thread_hashes_done[i];
+        thread_args[i].thr_id = thr_id;
+        thread_args[i].restart_flag = &work_restart[thr_id].restart;
         if (pthread_create(&mining_threads[i], NULL, mining_thread, &thread_args[i]) != 0) {
             applog(LOG_ERR, "Failed to create mining thread %d", i);
             // Clean up and return
