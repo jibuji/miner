@@ -222,8 +222,6 @@ extern bool want_longpoll;
 extern bool have_longpoll;
 extern bool have_gbt;
 extern bool allow_getwork;
-extern bool want_stratum;
-extern bool have_stratum;
 extern char *opt_cert;
 extern char *opt_proxy;
 extern long opt_proxy_type;
@@ -231,7 +229,6 @@ extern bool use_syslog;
 extern pthread_mutex_t applog_lock;
 extern struct thr_info *thr_info;
 extern int longpoll_thr_id;
-extern int stratum_thr_id;
 extern struct work_restart *work_restart;
 
 #define JSON_RPC_LONGPOLL (1 << 0)
