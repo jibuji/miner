@@ -133,8 +133,7 @@ int opt_init_threads = 1;  // Default value
 int opt_mining_threads = 2;  // Default value
 static int opt_scantime = 5;
 static enum algos opt_algo = ALGO_RandomX;
-static int opt_n_threads;
-static int num_processors;
+static int opt_n_miners = 1;
 static char *rpc_url;
 static char *rpc_userpass;
 static char *rpc_user, *rpc_pass;
@@ -142,6 +141,8 @@ static int pk_script_size;
 static unsigned char pk_script[42];
 
 static char coinbase_sig[101] = "";
+
+int num_processors;
 char *opt_cert;
 char *opt_proxy;
 long opt_proxy_type;
@@ -172,16 +173,13 @@ struct option
 static char const usage[] = "\
 Usage: " PROGRAM_NAME " [OPTIONS]\n\
 Options:\n\
-  -a, --algo=ALGO       specify the algorithm to use\n\
-						  randomx   RandomX\n\
-                          sha256d   SHA-256d\n\
   -o, --url=URL         URL of mining server\n\
   -O, --userpass=U:P    username:password pair for mining server\n\
   -u, --user=USERNAME   username for mining server\n\
   -p, --pass=PASSWORD   password for mining server\n\
       --cert=FILE       certificate for mining server using SSL\n\
   -x, --proxy=[PROTOCOL://]HOST[:PORT]  connect through a proxy\n\
-  -t, --threads=N       number of miner threads (default: number of processors)\n\
+  -m, --miners=N       number of miners (default: number of miners, each miner thread is denoted by --init-threads and --mining-threads)\n\
   -r, --retries=N       number of times to retry if a network call fails\n\
                           (default: retry indefinitely)\n\
   -R, --retry-pause=N   time to pause between retries, in seconds (default: 30)\n\
@@ -221,10 +219,9 @@ static char const short_options[] =
 #ifdef HAVE_SYSLOG_H
 	"S"
 #endif
-	"a:c:Dhp:Px:qr:R:s:t:T:o:u:O:V";
+	"a:c:Dhp:Px:qr:R:s:m:T:o:u:O:V";
 
 static struct option const options[] = {
-	{"algo", 1, NULL, 'a'},
 #ifndef WIN32
 	{"background", 0, NULL, 'B'},
 #endif
@@ -249,7 +246,7 @@ static struct option const options[] = {
 #ifdef HAVE_SYSLOG_H
 	{"syslog", 0, NULL, 'S'},
 #endif
-	{"threads", 1, NULL, 't'},
+	{"miners", 0, NULL, 'm'},
 	{"timeout", 1, NULL, 'T'},
 	{"url", 1, NULL, 'o'},
 	{"user", 1, NULL, 'u'},
@@ -763,7 +760,7 @@ static void share_result(int result, const char *reason)
 
 	hashrate = 0.;
 	pthread_mutex_lock(&stats_lock);
-	for (i = 0; i < opt_n_threads; i++)
+	for (i = 0; i < opt_n_miners; i++)
 		hashrate += thr_hashrates[i];
 	result ? accepted_count++ : rejected_count++;
 	pthread_mutex_unlock(&stats_lock);
@@ -1156,7 +1153,7 @@ static void *miner_thread(void *userdata)
 	int thr_id = mythr->id;
 	struct work work = {{0}};
 	uint32_t max_nonce;
-	uint32_t end_nonce = 0xffffffffU / opt_n_threads * (thr_id + 1) - 0x20;
+	uint32_t end_nonce = 0xffffffffU / opt_n_miners * (thr_id + 1) - 0x20;
 	unsigned char *scratchbuf = NULL;
 	char s[16];
 	int i;
@@ -1172,7 +1169,7 @@ static void *miner_thread(void *userdata)
 
 	/* Cpu affinity only makes sense if the number of threads is a multiple
 	 * of the number of CPUs */
-	if (num_processors > 1 && opt_n_threads % num_processors == 0)
+	if (num_processors > 1 && opt_n_miners % num_processors == 0)
 	{
 		if (!opt_quiet)
 			applog(LOG_INFO, "Binding thread %d to cpu %d",
@@ -1211,7 +1208,7 @@ static void *miner_thread(void *userdata)
 		{
 			work_free(&work);
 			work_copy(&work, &g_work);
-			work.data[19] = 0xffffffffU / opt_n_threads * thr_id;
+			work.data[19] = 0xffffffffU / opt_n_miners * thr_id;
 		}
 		else {
 			work.data[19] = hashes_done;
@@ -1267,12 +1264,12 @@ static void *miner_thread(void *userdata)
 			// applog(LOG_INFO, "thread %d: %lu hashes, %s khash/s",
 			// 	   thr_id, hashes_done, s);
 		}
-		if (opt_benchmark && thr_id == opt_n_threads - 1)
+		if (opt_benchmark && thr_id == opt_n_miners - 1)
 		{
 			double hashrate = 0.;
-			for (i = 0; i < opt_n_threads && thr_hashrates[i]; i++)
+			for (i = 0; i < opt_n_miners && thr_hashrates[i]; i++)
 				hashrate += thr_hashrates[i];
-			if (i == opt_n_threads)
+			if (i == opt_n_miners)
 			{
 				sprintf(s, hashrate >= 1e6 ? "%.0f" : "%.2f", 1e-3 * hashrate);
 				applog(LOG_INFO, "Total: %s khash/s", s);
@@ -1294,7 +1291,7 @@ static void restart_threads(void)
 {
 	int i;
 
-	for (i = 0; i < opt_n_threads; i++)
+	for (i = 0; i < opt_n_miners; i++)
 		work_restart[i].restart = 1;
 }
 
@@ -1502,26 +1499,6 @@ static void parse_arg(int key, char *arg, char *pname)
 
 	switch (key)
 	{
-	case 'a':
-		for (i = 0; i < ARRAY_SIZE(algo_names); i++)
-		{
-			v = strlen(algo_names[i]);
-			if (!strncmp(arg, algo_names[i], v))
-			{
-				if (arg[v] == '\0')
-				{
-					opt_algo = i;
-					break;
-				}
-			}
-		}
-		if (i == ARRAY_SIZE(algo_names))
-		{
-			fprintf(stderr, "%s: unknown algorithm -- '%s'\n",
-					pname, arg);
-			show_usage_and_exit(1);
-		}
-		break;
 	case 'B':
 		opt_background = true;
 		break;
@@ -1580,11 +1557,11 @@ static void parse_arg(int key, char *arg, char *pname)
 			show_usage_and_exit(1);
 		opt_timeout = v;
 		break;
-	case 't':
+	case 'm':
 		v = atoi(arg);
 		if (v < 1 || v > 9999) /* sanity check */
 			show_usage_and_exit(1);
-		opt_n_threads = v;
+		opt_n_miners = v;
 		break;
 	case 'u':
 		free(rpc_user);
@@ -1904,28 +1881,31 @@ int main(int argc, char *argv[])
 #endif
 	if (num_processors < 1)
 		num_processors = 1;
-	if (!opt_n_threads)
-		opt_n_threads = num_processors;
+
+	applog(LOG_INFO, "Number of processors: %d", num_processors);
+
+	if (!opt_n_miners)
+		opt_n_miners = num_processors;
 
 #ifdef HAVE_SYSLOG_H
 	if (use_syslog)
 		openlog("cpuminer", LOG_PID, LOG_USER);
 #endif
 
-	work_restart = calloc(opt_n_threads, sizeof(*work_restart));
+	work_restart = calloc(opt_n_miners, sizeof(*work_restart));
 	if (!work_restart)
 		return 1;
 
-	thr_info = calloc(opt_n_threads + 3, sizeof(*thr));
+	thr_info = calloc(opt_n_miners + 3, sizeof(*thr));
 	if (!thr_info)
 		return 1;
 
-	thr_hashrates = (double *)calloc(opt_n_threads, sizeof(double));
+	thr_hashrates = (double *)calloc(opt_n_miners, sizeof(double));
 	if (!thr_hashrates)
 		return 1;
 
 	/* init workio thread info */
-	work_thr_id = opt_n_threads;
+	work_thr_id = opt_n_miners;
 	thr = &thr_info[work_thr_id];
 	thr->id = work_thr_id;
 	thr->q = tq_new();
@@ -1942,7 +1922,7 @@ int main(int argc, char *argv[])
 	if (want_longpoll)
 	{
 		/* init longpoll thread info */
-		longpoll_thr_id = opt_n_threads + 1;
+		longpoll_thr_id = opt_n_miners + 1;
 		thr = &thr_info[longpoll_thr_id];
 		thr->id = longpoll_thr_id;
 		thr->q = tq_new();
@@ -1958,7 +1938,7 @@ int main(int argc, char *argv[])
 	}
 	
 	/* start mining threads */
-	for (i = 0; i < opt_n_threads; i++)
+	for (i = 0; i < opt_n_miners; i++)
 	{
 		thr = &thr_info[i];
 
@@ -1976,7 +1956,7 @@ int main(int argc, char *argv[])
 
 	applog(LOG_INFO, "%d miner threads started, "
 					 "using '%s' algorithm.",
-		   opt_n_threads,
+		   opt_n_miners,
 		   algo_names[opt_algo]);
 
 	/* main loop - simply wait for workio thread to exit */

@@ -92,24 +92,8 @@ void sha256d(unsigned char *hash, const unsigned char *data, int len)
 }
 
 
-// Add this function to get the number of CPU cores
-static int get_cpu_count() {
-    static int cpuCores = -1;
-    if (cpuCores == -1) {
-        long nprocs = sysconf(_SC_NPROCESSORS_ONLN);
-        if (nprocs < 1) {
-            applog(LOG_WARNING, "Failed to determine number of CPUs online, defaulting to 1");
-            cpuCores = 1;
-        } else {
-            cpuCores = (int)nprocs;
-        }
-        applog(LOG_INFO, "cpuCores: %d", cpuCores);
-    }
-    return cpuCores;
-}
-
 static inline void set_cpu_affinity(int cpu) {
-	cpu = cpu % get_cpu_count();
+	cpu = cpu % num_processors;
     cpu_set_t set;
     CPU_ZERO(&set);
     CPU_SET(cpu, &set);
