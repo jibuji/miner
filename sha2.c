@@ -7,7 +7,7 @@
  * Software Foundation; either version 2 of the License, or (at your option)
  * any later version.  See COPYING for more details.
  */
-
+#define _GNU_SOURCE
 #include "cpuminer-config.h"
 #include "miner.h"
 #include "randomx.h"
@@ -747,20 +747,22 @@ typedef struct  {
 	int cpu_id;
 }dataset_init_thread_args;
 
-static inline void affine_to_cpu(int id, int cpu)
-{
-	cpu_set_t set;
+static inline void set_cpu_affinity(int cpu) {
+    cpu_set_t set;
+    CPU_ZERO(&set);
+    CPU_SET(cpu, &set);
 
-	CPU_ZERO(&set);
-	CPU_SET(cpu, &set);
-	sched_setaffinity(0, sizeof(set), &set);
+    int result = sched_setaffinity(0, sizeof(set), &set);
+    if (result == 0) {
+        applog(LOG_INFO, "Successfully set CPU affinity to CPU %d.\n", cpu);
+    } else {
+        applog(LOG_ERR, "Failed to set CPU affinity.\n");
+    }
 }
 
 void randomx_init_dataset_thread(dataset_init_thread_args* args) {
     // Set CPU affinity
-    if (set_thread_affinity(args->cpu_id) != 0) {
-        applog(LOG_WARNING, "Failed to set thread affinity for init thread on CPU %d", args->cpu_id);
-    }
+    set_cpu_affinity(args->cpu_id);
     randomx_init_dataset(args->dataset, args->cache, args->startItem, args->itemCount);
 }
 
@@ -934,7 +936,7 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
 
     void *mining_thread(void *arg) {
         struct mining_thread_args *args = (struct mining_thread_args *)arg;
-        
+        set_cpu_affinity(args->cpu_id);
         uint32_t hash[8] __attribute__((aligned(32)));
         uint32_t input[20];
         memcpy(input, args->pdata, 80);
