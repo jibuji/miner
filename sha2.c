@@ -345,43 +345,39 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
     // Start mining threads
     pthread_t *mining_threads = malloc(sizeof(pthread_t) * miningThreadCount);
     struct mining_thread_args *thread_args = malloc(sizeof(struct mining_thread_args) * miningThreadCount);
-    if (!mining_threads || !thread_args) {
+    unsigned long *thread_hashes_done = calloc(miningThreadCount, sizeof(unsigned long));
+
+    if (!mining_threads || !thread_args || !thread_hashes_done) {
         applog(LOG_ERR, "Failed to allocate memory for mining threads");
         free(mining_threads);
         free(thread_args);
+        free(thread_hashes_done);
         return 0;
     }
 
     ctx.found = 0;
     ctx.result_nonce = 0;
-    uint32_t nonces_per_thread = (max_nonce - n) / miningThreadCount;
+    uint32_t nonces_per_thread = (max_nonce - pdata[19]) / miningThreadCount;
 
-    unsigned long *thread_hashes_done = calloc(miningThreadCount, sizeof(unsigned long));
-    if (!thread_hashes_done) {
-        applog(LOG_ERR, "Failed to allocate memory for thread hash counters");
-        free(mining_threads);
-        free(thread_args);
-        return 0;
-    }
-
+    // Point 4: Simplify thread creation
     for (int i = 0; i < miningThreadCount; ++i) {
-        thread_args[i].vm = ctx.vms[i];
-        thread_args[i].pdata = pdata;
-        thread_args[i].ptarget = ptarget;
-        thread_args[i].start_nonce = n + i * nonces_per_thread;
-        thread_args[i].end_nonce = (i == miningThreadCount - 1) ? max_nonce : n + (i + 1) * nonces_per_thread;
-        thread_args[i].found = &ctx.found;
-        thread_args[i].result_nonce = &ctx.result_nonce;
-        thread_args[i].cpu_id = i + initThreadCount;
-        thread_args[i].thread_hashes_done = &thread_hashes_done[i];
-        thread_args[i].thr_id = thr_id;
-        thread_args[i].restart_flag = &work_restart[thr_id].restart;
+        thread_args[i] = (struct mining_thread_args){
+            .vm = ctx.vms[i],
+            .pdata = pdata,
+            .ptarget = ptarget,
+            .start_nonce = pdata[19] + i * nonces_per_thread,
+            .end_nonce = (i == miningThreadCount - 1) ? max_nonce : pdata[19] + (i + 1) * nonces_per_thread,
+            .found = &ctx.found,
+            .result_nonce = &ctx.result_nonce,
+            .cpu_id = i + 1,
+            .thread_hashes_done = &thread_hashes_done[i],
+            .thr_id = thr_id,
+            .restart_flag = &work_restart[thr_id].restart
+        };
+
         if (pthread_create(&mining_threads[i], NULL, mining_thread, &thread_args[i]) != 0) {
             applog(LOG_ERR, "Failed to create mining thread %d", i);
-            // Clean up and return
-            for (int j = 0; j < i; ++j) {
-                pthread_join(mining_threads[j], NULL);
-            }
+            cleanup_mining_threads(mining_threads, i);
             free(mining_threads);
             free(thread_args);
             free(thread_hashes_done);
@@ -390,20 +386,12 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
     }
 
     // Wait for mining threads to complete
-    for (int i = 0; i < miningThreadCount; ++i) {
-        pthread_join(mining_threads[i], NULL);
-    }
-
+    cleanup_mining_threads(mining_threads, miningThreadCount);
     // Clean up
     free(mining_threads);
     free(thread_args);
 
-    unsigned long total_hashes_done = 0;
-    for (int i = 0; i < miningThreadCount; ++i) {
-        total_hashes_done += thread_hashes_done[i];
-    }
-
-    *hashes_done = total_hashes_done;
+    *hashes_done = sum_hashes_done(thread_hashes_done, miningThreadCount);
 
     free(thread_hashes_done);
 
