@@ -91,15 +91,6 @@ void sha256d(unsigned char *hash, const unsigned char *data, int len)
 }
 
 
-
-typedef struct  {
-	randomx_dataset *dataset;
-	randomx_cache *cache;
-	uint32_t startItem;
-	uint32_t itemCount;
-	int cpu_id;
-}dataset_init_thread_args;
-
 static inline void set_cpu_affinity(int cpu) {
     cpu_set_t set;
     CPU_ZERO(&set);
@@ -113,39 +104,178 @@ static inline void set_cpu_affinity(int cpu) {
     }
 }
 
+typedef struct  {
+       randomx_dataset *dataset;
+       randomx_cache *cache;
+       uint32_t startItem;
+       uint32_t itemCount;
+       int cpu_id;
+}dataset_init_thread_args;
+
+
 void randomx_init_dataset_thread(dataset_init_thread_args* args) {
     // Set CPU affinity
     set_cpu_affinity(args->cpu_id % 20);
     randomx_init_dataset(args->dataset, args->cache, args->startItem, args->itemCount);
 }
 
+
+
+// Step 1: Refactor configuration variables
+static int miningThreadCount;
+static int initThreadCount;
+static randomx_flags flags;
+
+static void init_randomx_config() {
+    miningThreadCount = opt_mining_threads;
+    initThreadCount = opt_init_threads;
+    flags = randomx_get_flags() | RANDOMX_FLAG_FULL_MEM | RANDOMX_FLAG_LARGE_PAGES;
+}
+
+// Step 2: Introduce randomx_context struct
+typedef struct {
+    randomx_dataset *dataset;
+    randomx_vm **vms;
+    uint8_t seed[32];
+    int found;
+    uint32_t result_nonce;
+} randomx_context;
+
+static randomx_context ctx = {0};
 static uint8_t previous_seed[32] = {0};
-static randomx_dataset *current_dataset = NULL;
-static randomx_vm **current_vms = NULL;
+
+// Step 3: Extract RandomX initialization
+static bool initialize_randomx(randomx_context *ctx, randomx_flags flags) {
+    if (ctx->dataset) {
+        randomx_release_dataset(ctx->dataset);
+        ctx->dataset = NULL;
+    }
+    if (ctx->vms) {
+        for (int i = 0; i < miningThreadCount; ++i) {
+            if (ctx->vms[i]) {
+                randomx_destroy_vm(ctx->vms[i]);
+            }
+        }
+        free(ctx->vms);
+        ctx->vms = NULL;
+    }
+
+    randomx_cache *cache = randomx_alloc_cache(flags);
+    if (!cache) {
+        applog(LOG_ERR, "randomx_alloc_cache() failed");
+        return false;
+    }
+    randomx_init_cache(cache, ctx->seed, sizeof(ctx->seed));
+
+    ctx->dataset = randomx_alloc_dataset(flags);
+    if (!ctx->dataset) {
+        applog(LOG_ERR, "randomx_alloc_dataset() failed");
+        randomx_release_cache(cache);
+        return false;
+    }
+
+    uint32_t datasetItemCount = randomx_dataset_item_count();
+    pthread_t* init_threads = malloc(sizeof(pthread_t) * initThreadCount);
+    dataset_init_thread_args* init_thread_args = malloc(sizeof(dataset_init_thread_args) * initThreadCount);
+
+    if (!init_threads || !init_thread_args) {
+        applog(LOG_ERR, "Failed to allocate memory for init threads");
+        randomx_release_dataset(ctx->dataset);
+        randomx_release_cache(cache);
+        free(init_threads);
+        free(init_thread_args);
+        return false;
+    }
+
+    int perThread = datasetItemCount / initThreadCount;
+    int remainder = datasetItemCount % initThreadCount;
+    uint32_t startItem = 0;
+    for (int i = 0; i < initThreadCount; ++i) {
+        int count = perThread + (i == initThreadCount - 1 ? remainder : 0);
+        init_thread_args[i] = (dataset_init_thread_args){
+            ctx->dataset,
+            cache,
+            startItem,
+            count,
+            i
+        };
+        if (pthread_create(&init_threads[i], NULL, (void *)randomx_init_dataset_thread, &init_thread_args[i]) != 0) {
+            applog(LOG_ERR, "Failed to create init thread %d", i);
+            for (int j = 0; j < i; ++j) {
+                pthread_join(init_threads[j], NULL);
+            }
+            randomx_release_dataset(ctx->dataset);
+            randomx_release_cache(cache);
+            free(init_threads);
+            free(init_thread_args);
+            return false;
+        }
+        startItem += count;
+    }
+
+    for (int i = 0; i < initThreadCount; ++i) {
+        pthread_join(init_threads[i], NULL);
+    }
+
+    free(init_threads);
+    free(init_thread_args);
+    randomx_release_cache(cache);
+
+    ctx->vms = malloc(sizeof(randomx_vm*) * miningThreadCount);
+    if (!ctx->vms) {
+        applog(LOG_ERR, "Failed to allocate memory for VMs");
+        randomx_release_dataset(ctx->dataset);
+        return false;
+    }
+
+    for (int i = 0; i < miningThreadCount; ++i) {
+        ctx->vms[i] = randomx_create_vm(flags, NULL, ctx->dataset);
+        if (!ctx->vms[i]) {
+            applog(LOG_ERR, "randomx_create_vm() failed for thread %d", i);
+            for (int j = 0; j < i; ++j) {
+                randomx_destroy_vm(ctx->vms[j]);
+            }
+            randomx_release_dataset(ctx->dataset);
+            free(ctx->vms);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+static void cleanup_mining_threads(pthread_t *threads, int count) {
+    for (int i = 0; i < count; ++i) {
+        pthread_join(threads[i], NULL);
+    }
+}
+
+static unsigned long sum_hashes_done(unsigned long *thread_hashes, int count) {
+    unsigned long total = 0;
+    for (int i = 0; i < count; ++i) {
+        total += thread_hashes[i];
+    }
+    return total;
+}
 
 int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
                      uint32_t max_nonce, unsigned long *hashes_done)
 {
+    init_randomx_config();
+
     struct timeval tv_start, tv_end, diff;
-    randomx_dataset *dataset = NULL;
-    randomx_vm **vms = NULL;
-    int miningThreadCount = opt_mining_threads;
-    int initThreadCount = opt_init_threads;
     gettimeofday(&tv_start, NULL);
-    randomx_flags flags = randomx_get_flags() | RANDOMX_FLAG_FULL_MEM | RANDOMX_FLAG_LARGE_PAGES;
-    
+
     uint32_t n = pdata[19] - 1;
     const uint32_t first_nonce = pdata[19];
-    uint8_t seed[32];
-    // pdata[19] = 0;
     uint32_t keystore[4] = {pdata[0], pdata[17]/345678, pdata[18], 0};
     char pdata_hex[161] = {0};
     bin2hex(pdata_hex, (unsigned char *)pdata, 80);
     applog(LOG_INFO, "pdata_for_seed: %s", pdata_hex);
-    sha256d(seed, (unsigned char *)keystore, 16);
+    sha256d(ctx.seed, (unsigned char *)keystore, 16);
 
     char seed_hex[65] = {0};
-    bin2hex(seed_hex, (unsigned char *)seed, 32);
+    bin2hex(seed_hex, (unsigned char *)ctx.seed, 32);
 
     applog(LOG_INFO, "seed: %s", seed_hex);
     char target_str[65] = {0};
@@ -158,113 +288,11 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
     applog(LOG_INFO, "target: %s", target_str);
 
     // Check if the seed has changed
-    if (memcmp(seed, previous_seed, 32) != 0) {
-        // Seed has changed, reinitialize everything
-        if (current_dataset) {
-            randomx_release_dataset(current_dataset);
-            current_dataset = NULL;
-        }
-        if (current_vms) {
-            for (int i = 0; i < miningThreadCount; ++i) {
-                if (current_vms[i]) {
-                    randomx_destroy_vm(current_vms[i]);
-                }
-            }
-            free(current_vms);
-            current_vms = NULL;
-        }
-
-		randomx_cache *cache = randomx_alloc_cache(flags);
-		if (!cache)
-		{
-			applog(LOG_ERR, "randomx_alloc_cache() failed");
-			return 0;
-		}
-        randomx_init_cache(cache, seed, sizeof(seed));
-
-        // Initialize dataset
-        dataset = randomx_alloc_dataset(flags);
-        if (!dataset)
-        {
-            applog(LOG_ERR, "randomx_alloc_dataset() failed");
-            randomx_release_cache(cache);
+    if (memcmp(ctx.seed, previous_seed, 32) != 0) {
+        if (!initialize_randomx(&ctx, flags)) {
             return 0;
         }
-        uint32_t datasetItemCount = randomx_dataset_item_count();
-        pthread_t* init_threads = malloc(sizeof(pthread_t) * initThreadCount);
-        dataset_init_thread_args* init_thread_args = malloc(sizeof(dataset_init_thread_args) * initThreadCount);
-
-        if (!init_threads || !init_thread_args) {
-            applog(LOG_ERR, "Failed to allocate memory for init threads");
-            randomx_release_dataset(dataset);
-            randomx_release_cache(cache);
-            free(init_threads);
-            free(init_thread_args);
-            return 0;
-        }
-
-        int perThread = datasetItemCount / initThreadCount;
-        int remainder = datasetItemCount % initThreadCount;
-        uint32_t startItem = 0;
-        for (int i = 0; i < initThreadCount; ++i) {
-            int count = perThread + (i == initThreadCount - 1 ? remainder : 0);
-            init_thread_args[i] = (dataset_init_thread_args){
-                dataset,
-                cache,
-                startItem,
-                count,
-                i  // Use thread index as CPU ID for affinity
-            };
-            if (pthread_create(&init_threads[i], NULL, (void *)randomx_init_dataset_thread, &init_thread_args[i]) != 0) {
-                applog(LOG_ERR, "Failed to create init thread %d", i);
-                // Clean up and return
-                for (int j = 0; j < i; ++j) {
-                    pthread_join(init_threads[j], NULL);
-                }
-                randomx_release_dataset(dataset);
-                randomx_release_cache(cache);
-                free(init_threads);
-                free(init_thread_args);
-                return 0;
-            }
-            startItem += count;
-        }
-        for (int i = 0; i < initThreadCount; ++i) {
-            pthread_join(init_threads[i], NULL);
-        }
-
-        free(init_threads);
-        free(init_thread_args);
-        randomx_release_cache(cache);
-
-        // Create new VMs
-        vms = malloc(sizeof(randomx_vm*) * miningThreadCount);
-        if (!vms) {
-            applog(LOG_ERR, "Failed to allocate memory for VMs");
-            randomx_release_dataset(dataset);
-            return 0;
-        }
-        for (int i = 0; i < miningThreadCount; ++i) {
-            vms[i] = randomx_create_vm(flags, NULL, dataset);
-            if (!vms[i]) {
-                applog(LOG_ERR, "randomx_create_vm() failed for thread %d", i);
-                for (int j = 0; j < i; ++j) {
-                    randomx_destroy_vm(vms[j]);
-                }
-                randomx_release_dataset(dataset);
-                free(vms);
-                return 0;
-            }
-        }
-
-        // Update the previous seed
-        memcpy(previous_seed, seed, 32);
-        current_dataset = dataset;
-        current_vms = vms;
-    } else {
-        // Seed hasn't changed, use existing dataset and VMs
-        dataset = current_dataset;
-        vms = current_vms;
+        memcpy(previous_seed, ctx.seed, 32);
     }
 
     gettimeofday(&tv_end, NULL);
@@ -324,8 +352,8 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
         return 0;
     }
 
-    int found = 0;
-    uint32_t result_nonce = 0;
+    ctx.found = 0;
+    ctx.result_nonce = 0;
     uint32_t nonces_per_thread = (max_nonce - n) / miningThreadCount;
 
     unsigned long *thread_hashes_done = calloc(miningThreadCount, sizeof(unsigned long));
@@ -337,14 +365,14 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
     }
 
     for (int i = 0; i < miningThreadCount; ++i) {
-        thread_args[i].vm = vms[i];
+        thread_args[i].vm = ctx.vms[i];
         thread_args[i].pdata = pdata;
         thread_args[i].ptarget = ptarget;
         thread_args[i].start_nonce = n + i * nonces_per_thread;
         thread_args[i].end_nonce = (i == miningThreadCount - 1) ? max_nonce : n + (i + 1) * nonces_per_thread;
-        thread_args[i].found = &found;
-        thread_args[i].result_nonce = &result_nonce;
-        thread_args[i].cpu_id = (i + 1);  // Offset CPU IDs to avoid overlap with init threads
+        thread_args[i].found = &ctx.found;
+        thread_args[i].result_nonce = &ctx.result_nonce;
+        thread_args[i].cpu_id = i + initThreadCount;
         thread_args[i].thread_hashes_done = &thread_hashes_done[i];
         thread_args[i].thr_id = thr_id;
         thread_args[i].restart_flag = &work_restart[thr_id].restart;
@@ -379,8 +407,8 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
 
     free(thread_hashes_done);
 
-    if (found) {
-        pdata[19] = result_nonce;
+    if (ctx.found) {
+        pdata[19] = ctx.result_nonce;
         return 1;
     }
 
