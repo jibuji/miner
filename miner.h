@@ -215,6 +215,7 @@ extern int opt_timeout;
 extern int opt_init_threads;
 extern int opt_mining_threads;
 extern int num_processors;
+extern bool opt_huge_page;
 extern bool want_longpoll;
 extern bool have_longpoll;
 extern bool have_gbt;

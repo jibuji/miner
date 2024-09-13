@@ -132,7 +132,7 @@ static randomx_flags flags;
 static void init_randomx_config() {
     miningThreadCount = opt_mining_threads;
     initThreadCount = opt_init_threads;
-    flags = randomx_get_flags() | RANDOMX_FLAG_FULL_MEM | RANDOMX_FLAG_LARGE_PAGES;
+    flags = randomx_get_flags() | RANDOMX_FLAG_FULL_MEM | (opt_huge_page ? RANDOMX_FLAG_LARGE_PAGES : 0);
 }
 
 // Step 2: Introduce randomx_context struct
