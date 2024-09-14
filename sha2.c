@@ -58,36 +58,14 @@ static const uint32_t sha256d_hash1[16] = {
 
 void sha256d(unsigned char *hash, const unsigned char *data, int len)
 {
-	// BYTE buf[SHA256_BLOCK_SIZE];
-	// SHA256_CTX ctx;
-	// sha256_init_(&ctx);
-	// sha256_update_(&ctx, data, len);
-	// sha256_final_(&ctx, buf);
-	// sha256_init_(&ctx);
-	// sha256_update_(&ctx, buf, SHA256_BLOCK_SIZE);
-	// sha256_final_(&ctx, hash);
-	uint32_t S[16], T[16];
-	int i, r;
-
-	sha256_init(S);
-	for (r = len; r > -9; r -= 64)
-	{
-		if (r < 64)
-			memset(T, 0, 64);
-		memcpy(T, data + len - r, r > 64 ? 64 : (r < 0 ? 0 : r));
-		if (r >= 0 && r < 64)
-			((unsigned char *)T)[r] = 0x80;
-		for (i = 0; i < 16; i++)
-			T[i] = be32dec(T + i);
-		if (r < 56)
-			T[15] = 8 * len;
-		sha256_transform(S, T, 0);
-	}
-	memcpy(S + 8, sha256d_hash1 + 8, 32);
-	sha256_init(T);
-	sha256_transform(T, S, 0);
-	for (i = 0; i < 8; i++)
-		be32enc((uint32_t *)hash + i, T[i]);
+	BYTE buf[SHA256_BLOCK_SIZE];
+	SHA256_CTX ctx;
+	sha256_init_(&ctx);
+	sha256_update_(&ctx, data, len);
+	sha256_final_(&ctx, buf);
+	sha256_init_(&ctx);
+	sha256_update_(&ctx, buf, SHA256_BLOCK_SIZE);
+	sha256_final_(&ctx, hash);
 }
 
 
