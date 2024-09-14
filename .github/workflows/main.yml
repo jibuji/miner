@@ -52,7 +52,7 @@ jobs:
     
         - name: Upload config.log
           if: failure() # Only run this step if a previous step failed
-          uses: actions/upload-artifact@v2
+          uses: actions/upload-artifact@v4
           with:
             name: config.log
             path: ./config.log
@@ -117,7 +117,7 @@ jobs:
 
         - name: Upload config.log
           if: failure() # Only run this step if a previous step failed
-          uses: actions/upload-artifact@v2
+          uses: actions/upload-artifact@v4
           with:
             name: config.log
             path: ./config.log
@@ -338,7 +338,7 @@ jobs:
           chmod +x minerd-macos-x86_64
       - name: Upload config.log
         if: failure() # Only run this step if a previous step failed
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: config.log
           path: ./config.log
@@ -437,7 +437,7 @@ jobs:
 
         - name: Upload config.log
           if: failure() # Only run this step if a previous step failed
-          uses: actions/upload-artifact@v2
+          uses: actions/upload-artifact@v4
           with:
             name: config.log
             path: ./config.log
