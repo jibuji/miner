@@ -115,10 +115,11 @@ static int miningThreadCount;
 static int initThreadCount;
 static randomx_flags flags;
 
+static bool huge_page_working = true; //  0: no, 1: yes
 static void init_randomx_config() {
     miningThreadCount = opt_mining_threads;
     initThreadCount = opt_init_threads;
-    flags = randomx_get_flags() | RANDOMX_FLAG_FULL_MEM | (opt_huge_page ? RANDOMX_FLAG_LARGE_PAGES : 0);
+    flags = randomx_get_flags() | RANDOMX_FLAG_FULL_MEM | (huge_page_working ? RANDOMX_FLAG_LARGE_PAGES : 0);
 }
 
 // Step 2: Introduce randomx_context struct
@@ -151,9 +152,22 @@ static bool initialize_randomx(randomx_context *ctx, randomx_flags flags) {
 
     randomx_cache *cache = randomx_alloc_cache(flags);
     if (!cache) {
-        applog(LOG_ERR, "randomx_alloc_cache() failed");
-        return false;
+		if (huge_page_working) {
+			applog(LOG_WARNING, "randomx_alloc_cache() failed, trying to allocate without huge pages");
+			huge_page_working = false;
+			flags = flags & ~RANDOMX_FLAG_LARGE_PAGES;
+			cache = randomx_alloc_cache(flags);
+			if (!cache) {
+				applog(LOG_ERR, "randomx_alloc_cache() failed even without huge pages");
+				return false;
+			}
+			applog(LOG_WARNING, "randomx_alloc_cache() succeeded without huge pages");
+		} else {
+			applog(LOG_ERR, "randomx_alloc_cache() failed");
+			return false;
+		}
     }
+
     randomx_init_cache(cache, ctx->seed, sizeof(ctx->seed));
 
     ctx->dataset = randomx_alloc_dataset(flags);
