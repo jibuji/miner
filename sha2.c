@@ -18,7 +18,6 @@
 #include <pthread.h>
 #include <sched.h>
 #include <unistd.h>
-#include <sys/sysinfo.h>
 #ifdef __x86_64__
 #include <cpuid.h>
 #endif
