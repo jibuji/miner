@@ -92,6 +92,7 @@ void sha256d(unsigned char *hash, const unsigned char *data, int len)
 
 
 static inline void set_cpu_affinity(int cpu) {
+#ifdef __linux__
 	cpu = cpu % num_processors;
     cpu_set_t set;
     CPU_ZERO(&set);
@@ -103,6 +104,14 @@ static inline void set_cpu_affinity(int cpu) {
     } else {
         applog(LOG_ERR, "Failed to set CPU %d affinity.\n", cpu);
     }
+#elif defined(__APPLE__)
+    // macOS doesn't support setting CPU affinity in the same way
+    // You might want to use thread_policy_set() here if you need similar functionality
+    // For now, we'll just log a message
+    applog(LOG_INFO, "CPU affinity setting is not supported on macOS (requested CPU: %d).\n", cpu);
+#else
+    applog(LOG_INFO, "CPU affinity setting is not supported on this platform (requested CPU: %d).\n", cpu);
+#endif
 }
 
 typedef struct  {
