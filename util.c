@@ -954,25 +954,25 @@ bool fulltest(const uint32_t *hash, const uint32_t *target)
 		}
 	}
 
-	if (opt_debug)
-	{
-		uint32_t hash_be[8], target_be[8];
-		char hash_str[65], target_str[65];
+	// if (opt_debug)
+	// {
+	// 	uint32_t hash_be[8], target_be[8];
+	// 	char hash_str[65], target_str[65];
 
-		for (i = 0; i < 8; i++)
-		{
-			be32enc(hash_be + i, hash[7 - i]);
-			be32enc(target_be + i, target[7 - i]);
-		}
-		bin2hex(hash_str, (unsigned char *)hash_be, 32);
-		bin2hex(target_str, (unsigned char *)target_be, 32);
+	// 	for (i = 0; i < 8; i++)
+	// 	{
+	// 		be32enc(hash_be + i, hash[7 - i]);
+	// 		be32enc(target_be + i, target[7 - i]);
+	// 	}
+	// 	bin2hex(hash_str, (unsigned char *)hash_be, 32);
+	// 	bin2hex(target_str, (unsigned char *)target_be, 32);
 
-		applog(LOG_DEBUG, "DEBUG: %s\nHash:   %s\nTarget: %s",
-			   rc ? "hash <= target"
-				  : "hash > target (false positive)",
-			   hash_str,
-			   target_str);
-	}
+	// 	applog(LOG_DEBUG, "DEBUG: %s\nHash:   %s\nTarget: %s",
+	// 		   rc ? "hash <= target"
+	// 			  : "hash > target (false positive)",
+	// 		   hash_str,
+	// 		   target_str);
+	// }
 
 	return rc;
 }

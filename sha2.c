@@ -283,7 +283,11 @@ void *mining_thread(void *arg) {
     memcpy(input, args->pdata, 80);
 
     unsigned long hashes_done = 0;
-    for (uint32_t n = args->start_nonce; n < args->end_nonce && !(*args->found); ++n) {
+    const uint32_t start = args->start_nonce;
+    const uint32_t end = args-> end_nonce;
+    const int* found = args->found;
+    const volatile unsigned long *restart_flag = args->restart_flag;
+    for (uint32_t n = start; n < end && !(*found); ++n) {
         if (*args->restart_flag) {
             *args->thread_hashes_done = hashes_done;
             return NULL;
