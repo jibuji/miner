@@ -288,7 +288,7 @@ void *mining_thread(void *arg) {
     const int* found = args->found;
     const volatile unsigned long *restart_flag = args->restart_flag;
     for (uint32_t n = start; n < end && !(*found); ++n) {
-        if (*args->restart_flag) {
+        if (*restart_flag) {
             *args->thread_hashes_done = hashes_done;
             return NULL;
         }

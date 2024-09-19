@@ -243,8 +243,22 @@ extern int varint_encode(unsigned char *p, uint64_t n);
 extern size_t address_to_script(unsigned char *out, size_t outsz, const char *addr);
 extern int timeval_subtract(struct timeval *result, struct timeval *x,
 							struct timeval *y);
-extern bool fulltest(const uint32_t *hash, const uint32_t *target);
+
 extern void diff_to_target(uint32_t *target, double diff);
+
+
+static inline bool fulltest(const uint32_t *hash, const uint32_t *target)
+{
+	int i;
+
+	for (i = 7; i >= 0; i--)
+	{
+		if (hash[i] != target[i]) // Check for inequality directly
+			return hash[i] < target[i]; // Return true if hash is less, false otherwise
+	}
+
+	return true; // If all are equal, return true
+}
 
 struct stratum_job
 {

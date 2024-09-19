@@ -1228,7 +1228,7 @@ static void *miner_thread(void *userdata)
 		max64 *= thr_hashrates[thr_id];
 		if (max64 <= 0)
 		{
-			max64 = 60*100000;
+			max64 = 60*10000;
 		}
 		if (work.data[19] + max64 > end_nonce)
 			max_nonce = end_nonce;
