@@ -22,6 +22,10 @@
 #include <cpuid.h>
 #endif
 
+#ifdef _WIN32 || __CYGWIN__
+#include <windows.h>
+#endif
+
 static const uint32_t sha256_h[8] = {
 	0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
 	0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
@@ -69,9 +73,14 @@ void sha256d(unsigned char *hash, const unsigned char *data, int len)
 }
 
 
-static inline void set_cpu_affinity(int cpu) {
+static inline void set_cpu_affinity(int cpu_index) {
+    if (affinity_start == -1 || affinity_end == -1) {
+        return;
+    }
+    int cpu_count = affinity_end - affinity_start + 1;
+    int cpu = affinity_start + cpu_index % cpu_count;
+    applog(LOG_INFO, "Setting thread index %d, affinity to cpu %d\n", cpu_index, cpu);
 #ifdef __linux__
-	cpu = cpu % num_processors;
     cpu_set_t set;
     CPU_ZERO(&set);
     CPU_SET(cpu, &set);
@@ -82,11 +91,15 @@ static inline void set_cpu_affinity(int cpu) {
     } else {
         applog(LOG_ERR, "Failed to set CPU %d affinity.\n", cpu);
     }
-#elif defined(__APPLE__)
-    // macOS doesn't support setting CPU affinity in the same way
-    // You might want to use thread_policy_set() here if you need similar functionality
-    // For now, we'll just log a message
-    applog(LOG_INFO, "CPU affinity setting is not supported on macOS (requested CPU: %d).\n", cpu);
+#elif defined(_WIN32) || defined(__CYGWIN__)  // Check for Windows
+    HANDLE hThread = GetCurrentThread(); // Get the current thread handle
+    DWORD_PTR mask = 1 << cpu; // Create a mask for the specified CPU
+
+    if (SetThreadAffinityMask(hThread, mask) == 0) {
+        applog(LOG_ERR, "Failed to set CPU %d affinity.\n", cpu);
+    } else {
+        // applog(LOG_INFO, "Successfully set CPU affinity to CPU %d.\n", cpu);
+    }
 #else
     applog(LOG_INFO, "CPU affinity setting is not supported on this platform (requested CPU: %d).\n", cpu);
 #endif
@@ -278,26 +291,26 @@ struct mining_thread_args {
 void *mining_thread(void *arg) {
     struct mining_thread_args *args = (struct mining_thread_args *)arg;
     set_cpu_affinity(args->cpu_id);
-    uint32_t hash[8] __attribute__((aligned(32)));
-    uint32_t input[20];
+    uint32_t hash[8] __attribute__((aligned(64)));
+    uint32_t input[20] __attribute__((aligned(64)));
     memcpy(input, args->pdata, 80);
 
     unsigned long hashes_done = 0;
     const uint32_t start = args->start_nonce;
     const uint32_t end = args-> end_nonce;
-    const int* found = args->found;
+    int* found = args->found;
     const volatile unsigned long *restart_flag = args->restart_flag;
-    for (uint32_t n = start; n < end && !(*found); ++n) {
-        if (*restart_flag) {
-            *args->thread_hashes_done = hashes_done;
-            return NULL;
-        }
+    for (uint32_t n = start; n < end; ++n) {
         input[19] = n;
         randomx_calculate_hash(args->vm, input, 80, hash);
         hashes_done++;
         if (fulltest(hash, args->ptarget)) {
-            *args->found = 1;
+            *found = 1;
             *args->result_nonce = n;
+            *args->thread_hashes_done = hashes_done;
+            return NULL;
+        }
+        if (hashes_done % 2048 == 0 && (*restart_flag || *found)) {
             *args->thread_hashes_done = hashes_done;
             return NULL;
         }
@@ -375,7 +388,7 @@ int scanhash_randomx(int thr_id, uint32_t *pdata, const uint32_t *ptarget,
             .end_nonce = (i == miningThreadCount - 1) ? max_nonce : pdata[19] + (i + 1) * nonces_per_thread,
             .found = &ctx.found,
             .result_nonce = &ctx.result_nonce,
-            .cpu_id = i + 1,
+            .cpu_id = i,
             .thread_hashes_done = &thread_hashes_done[i],
             .thr_id = thr_id,
             .restart_flag = &work_restart[thr_id].restart

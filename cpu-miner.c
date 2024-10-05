@@ -39,7 +39,7 @@
 #include "miner.h"
 
 #define PROGRAM_NAME "minerd"
-#define LP_SCANTIME 200
+#define LP_SCANTIME 500
 
 #ifdef __linux /* Linux specific policy and affinity management */
 #include <sched.h>
@@ -144,6 +144,8 @@ static unsigned char pk_script[42];
 static char coinbase_sig[101] = "";
 
 int num_processors;
+int affinity_start = -1; // Variable to hold the start of the affinity range
+int affinity_end = -1;   // Variable to hold the end of the affinity range
 char *opt_cert;
 char *opt_proxy;
 long opt_proxy_type;
@@ -209,6 +211,7 @@ Options:\n\
       --init-threads=N     Set the number of RandomX initialization threads (default: 2)\n\
       --mining-threads=N   Set the number of RandomX mining threads (default: 4)\n\
       --huge-page         Use huge pages for RandomX (default: true)\n\
+      --affinity-range=START,END  Set the CPU affinity range for mining threads\n\
   -c, --config=FILE     load a JSON-format configuration file\n\
   -V, --version         display version information and exit\n\
   -h, --help            display this help text and exit\n\
@@ -257,6 +260,7 @@ static struct option const options[] = {
 	{"init-threads", required_argument, NULL, 1016},
     {"mining-threads", required_argument, NULL, 1017},
 	{"huge-page", 0, NULL, 1018},
+	{"affinity-range", 1, NULL, 1019},
 	{0, 0, 0, 0}};
 
 struct work
@@ -1172,13 +1176,13 @@ static void *miner_thread(void *userdata)
 
 	/* Cpu affinity only makes sense if the number of threads is a multiple
 	 * of the number of CPUs */
-	if (num_processors > 1 && opt_n_miners % num_processors == 0)
-	{
-		if (!opt_quiet)
-			applog(LOG_INFO, "Binding thread %d to cpu %d",
-				   thr_id, thr_id % num_processors);
-		affine_to_cpu(thr_id, thr_id % num_processors);
-	}
+	// if (num_processors > 1 && opt_n_miners % num_processors == 0)
+	// {
+	// 	if (!opt_quiet)
+	// 		applog(LOG_INFO, "Binding thread %d to cpu %d",
+	// 			   thr_id, thr_id % num_processors);
+	// 	affine_to_cpu(thr_id, thr_id % num_processors);
+	// }
 
 	while (1)
 	{
@@ -1722,6 +1726,31 @@ static void parse_arg(int key, char *arg, char *pname)
 	case 1018:
 		opt_huge_page = true;
 		break;
+	case 1019: // New case for affinity-range
+	{
+		char *endptr;
+		char *token = strtok(arg, ",");
+		if (token) {
+			affinity_start = strtol(token, &endptr, 10);
+			if (*endptr != '\0') {
+				fprintf(stderr, "%s: invalid start value for affinity-range -- '%s'\n", pname, arg);
+				show_usage_and_exit(1);
+			}
+		}
+		token = strtok(NULL, ",");
+		if (token) {
+			affinity_end = strtol(token, &endptr, 10);
+			if (*endptr != '\0') {
+				fprintf(stderr, "%s: invalid end value for affinity-range -- '%s'\n", pname, arg);
+				show_usage_and_exit(1);
+			}
+		}
+		if (affinity_start < 0 || affinity_end < 0 || affinity_start > affinity_end) {
+			fprintf(stderr, "%s: invalid affinity range -- '%s'\n", pname, arg);
+			show_usage_and_exit(1);
+		}
+		break;
+	}
 	default:
 		show_usage_and_exit(1);
 	}
